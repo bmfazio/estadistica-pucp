@@ -1,0 +1,28 @@
+---
+title: "Untitled"
+author: "Boris M Fazio"
+date: "31 de febrero de 1217"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("C:/Users/bfazio/Desktop/analisis/tecmues")
+library(data.table)
+library(magrittr)
+```
+
+## Ejercicio 27
+
+En una investigación para estudiar la relación entre la propensión al consumo de alcohol por parte de adolescentes varones y variables como el control parental, regulación emocional y madurez social, se desea tomar un MASs para sólo el distrito de San Miguel. Puesto que la propensión se medirá mediante una proporción, es de interés estimar esta proporción con un margen de error no mayor a 0.07 y un nivel de confianza del 95%. Usando en lo posible el paquete survey de R.
+
+1. Halle el tamaño de muestra requerido para este estudio. Para esto y para crear su marco muestral puede hacer uso de la página web del Ministerio de Educación (<http://escale.minedu.gob.pe/web/inicio/padron-de-iiee>), la cual contiene información de todos los colegios del país en base al censo nacional escolar del 2016.
+
+**Resolución:** Aplicamos la fórmula derivada por Hájek para estimar el tamaño de muestra:
+
+$$\text{IC} = \left[\bar{p} - z_{1-\alpha/2}\sqrt{\frac{\bar{p}(1-\bar{p})}{n-1}}\sqrt{1-\frac{n}{N}} , \bar{p} + z_{1-\alpha/2}\sqrt{\frac{\bar{p}(1-\bar{p})}{n-1}}\sqrt{1-\frac{n}{N}} \right]$$
+
+2. Tome la muestra anterior y estime en base a ella el total de alumnos matriculados el 2016 en los colegios de varones de San Miguel, así como la proporción de estudiantes que pertenecen a un colegio de gestión privada. En ambos casos obtenga el error de estimación estimado de los estimadores correspondientes.
+
+3. ¿Cree usted que el diseño MASs empleado sea apropiado para los fines de este estudio? Indique si no fuera el caso, qué dificultades acarrea este diseño.
