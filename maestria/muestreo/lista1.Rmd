@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-setwd("D:/")
+setwd("C:/Users/bfazio/Desktop/analisis/tecmues")
 library(data.table)
 library(magrittr)
 ```
@@ -19,13 +19,45 @@ En una investigación para estudiar la relación entre la propensión al consumo
 
 1. Halle el tamaño de muestra requerido para este estudio. Para esto y para crear su marco muestral puede hacer uso de la página web del Ministerio de Educación (<http://escale.minedu.gob.pe/web/inicio/padron-de-iiee>), la cual contiene información de todos los colegios del país en base al censo nacional escolar del 2016.
 
-**Resolución:** Usamos la fórmula de Hájek para estimar intervalos de confianza en una población finita:
+**Resolución:** Usamos la fórmula de Hájek para estimar intervalos de confianza en una población finita, aplicada a una proporción:
 
-$$\text{IC} = \left[\bar{p} - z_{1-\alpha/2}\sqrt{\frac{\bar{p}(1-\bar{p})}{n-1}}\sqrt{1-\frac{n}{N}} , \bar{p} + z_{1-\alpha/2}\sqrt{\frac{\bar{p}(1-\bar{p})}{n-1}}\sqrt{1-\frac{n}{N}} \right]$$
-Tomando el error como $e = \left|p-\bar{p}\right|$, el intervalo anterior implica:
+$$\text{IC} = \left[ \bar{p} - z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n-1} \left(1-\frac{n}{N}\right)} , \bar{p} + z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n-1} \left(1-\frac{n}{N}\right)} \right]$$
+Definiendo el error de estimación como $e = \left|p-\bar{p}\right|$, el intervalo anterior implica:
 
-$$e = z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}\sqrt{1-\frac{n}{N}} \rightarrow n = \frac{z^2_{1-\alpha/2} \sigma^2 N}{z^2_{1-\alpha/2} \sigma^2 + e^2 N}$$
+$$e = z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n} \left( 1 - \frac{n}{N} \right)} \rightarrow n = \frac{z^2_{1-\alpha/2} \bar{p}(1-\bar{p}) N}{z^2_{1-\alpha/2} \bar{p}(1-\bar{p}) + e^2 N}$$
+Dados los datos del problema: $z_{.975} = 1.96$, $e = 0.07$. Desconocemos la proporción poblacional de propensión al consumo de alcohol, así que asumimos $\bar{p} = 0.5$. Para determinar $N$ debemos examinar nuestro marco muestral, dado por la cantidad de alumnos varones cursando secundaria en IIEE del distrito de San Miguel:
+
+```{r}
+z <- 1.96; e <- 0.07; p <- 0.5
+
+iiee <- fread("minedu.csv")[,`Alumnos (2016)`:=as.double(`Alumnos (2016)`)]
+iiee[Género=="Mixto",`Alumnos (2016)`:=`Alumnos (2016)`*0.5] #Asumimos que los colegios mixtos tienen 50% de alumnos varones
+N <- sum(iiee$`Alumnos (2016)`)
+```
+
+Finalmente, aplicamos la fórmula a los datos:
+
+```{r}
+n <- ceiling((z^2)*p*(1-p)*N/((z^2)*p*(1-p)+(e^2)*N)) #Redondeamos al entero superior
+print(n)
+```
 
 2. Tome la muestra anterior y estime en base a ella el total de alumnos matriculados el 2016 en los colegios de varones de San Miguel, así como la proporción de estudiantes que pertenecen a un colegio de gestión privada. En ambos casos obtenga el error de estimación estimado de los estimadores correspondientes.
 
+Bajo los supuestos del ejercicio anterior, generamos una muestra de la población considerando las variables requeridas.
+
+```{r}
+iiee[,`Gestión / Dependencia`:=gsub(pattern = " - .*","",iiee$`Gestión / Dependencia`)]
+poblacion <- iiee[,.(alumnos=sum(`Alumnos (2016)`)),.(Género,`Gestión / Dependencia`)]
+
+set.seed(2017)
+muestra <- poblacion[rep(1:4,times=poblacion$alumnos),1:2][sample(N, n)]
+
+p_varon <- nrow(muestra[Género=="Varones"])/n
+p_priva <- nrow(muestra[`Gestión / Dependencia`=="Privada"])/n
+
+```
+
 3. ¿Cree usted que el diseño MASs empleado sea apropiado para los fines de este estudio? Indique si no fuera el caso, qué dificultades acarrea este diseño.
+
+# ño
