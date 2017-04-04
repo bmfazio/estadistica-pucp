@@ -1,7 +1,7 @@
 ---
-title: "Untitled"
+title: "Lista 1 - Técnicas de Muestreo"
 author: "Boris M Fazio"
-date: "31 de febrero de 1217"
+date: "2017-04-22"
 output: html_document
 ---
 
@@ -20,7 +20,7 @@ En una investigación para estudiar la relación entre la propensión al consumo
 
 1. Halle el tamaño de muestra requerido para este estudio. Para esto y para crear su marco muestral puede hacer uso de la página web del Ministerio de Educación (<http://escale.minedu.gob.pe/web/inicio/padron-de-iiee>), la cual contiene información de todos los colegios del país en base al censo nacional escolar del 2016.
 
-**Resolución:** Usamos la fórmula de Hájek para estimar intervalos de confianza en una población finita, aplicada a una proporción:
+**Respuesta:** Usamos la fórmula de Hájek para estimar intervalos de confianza en una población finita, aplicada a una proporción:
 
 $$\text{IC} = \left[ \bar{p} - z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n-1} \left(1-\frac{n}{N}\right)} , \bar{p} + z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n-1} \left(1-\frac{n}{N}\right)} \right]$$
 Definiendo el error de estimación como $e = \left|p-\bar{p}\right|$, el intervalo anterior implica:
@@ -47,7 +47,7 @@ cat(paste("n =",n))
 
 2. Tome la muestra anterior y estime en base a ella el total de alumnos matriculados el 2016 en los colegios de varones de San Miguel, así como la proporción de estudiantes que pertenecen a un colegio de gestión privada. En ambos casos obtenga el error de estimación estimado de los estimadores correspondientes.
 
-**Resolución:**  Bajo los supuestos del ejercicio anterior, generamos una muestra de la población considerando las variables requeridas.
+**Respuesta:**  Bajo los supuestos del ejercicio anterior, generamos una muestra de la población considerando las variables requeridas.
 
 ```{r}
 iiee[,`Gestión / Dependencia`:=gsub(pattern = " - .*","",iiee$`Gestión / Dependencia`)]
@@ -82,4 +82,4 @@ cat(paste("Proporción de alumnos en colegios privados:",r2(p_priva),"IC95: [",r
 ```
 3. ¿Cree usted que el diseño MASs empleado sea apropiado para los fines de este estudio? Indique si no fuera el caso, qué dificultades acarrea este diseño.
 
-# ño
+**Respuesta:** No. Dado que el estudio tiene como meta comparar la proporción de alumnos propensos a consumir alcohol en relación a otras características, es deseable minimizar el error de estimación para la proporción de cada subgrupo generado por los valores de las variables de interés. Ya que estos valores probablemente no tengan una distribución uniforme en la población total, es posible que un MAS dé como resultado un número de observaciones reducido para algunos subgrupos, con un error de estimación elevado como consecuencia.
