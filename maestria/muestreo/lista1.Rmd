@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-setwd("C:/Users/bfazio/Desktop/analisis/tecmues")
+setwd("D:/")
 library(data.table)
 library(magrittr)
 ```
@@ -19,9 +19,12 @@ En una investigación para estudiar la relación entre la propensión al consumo
 
 1. Halle el tamaño de muestra requerido para este estudio. Para esto y para crear su marco muestral puede hacer uso de la página web del Ministerio de Educación (<http://escale.minedu.gob.pe/web/inicio/padron-de-iiee>), la cual contiene información de todos los colegios del país en base al censo nacional escolar del 2016.
 
-**Resolución:** Aplicamos la fórmula derivada por Hájek para estimar el tamaño de muestra:
+**Resolución:** Usamos la fórmula de Hájek para estimar intervalos de confianza en una población finita:
 
 $$\text{IC} = \left[\bar{p} - z_{1-\alpha/2}\sqrt{\frac{\bar{p}(1-\bar{p})}{n-1}}\sqrt{1-\frac{n}{N}} , \bar{p} + z_{1-\alpha/2}\sqrt{\frac{\bar{p}(1-\bar{p})}{n-1}}\sqrt{1-\frac{n}{N}} \right]$$
+Tomando el error como $e = \left|p-\bar{p}\right|$, el intervalo anterior implica:
+
+$$e = z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}\sqrt{1-\frac{n}{N}} \rightarrow n = \frac{z^2_{1-\alpha/2} \sigma^2 N}{z^2_{1-\alpha/2} \sigma^2 + e^2 N}$$
 
 2. Tome la muestra anterior y estime en base a ella el total de alumnos matriculados el 2016 en los colegios de varones de San Miguel, así como la proporción de estudiantes que pertenecen a un colegio de gestión privada. En ambos casos obtenga el error de estimación estimado de los estimadores correspondientes.
 
