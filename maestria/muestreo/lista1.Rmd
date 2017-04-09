@@ -83,3 +83,26 @@ cat(paste("Proporción de alumnos en colegios privados:",r2(p_priva),"IC95: [",r
 3. ¿Cree usted que el diseño MASs empleado sea apropiado para los fines de este estudio? Indique si no fuera el caso, qué dificultades acarrea este diseño.
 
 **Respuesta:** No. Dado que el estudio tiene como meta comparar la proporción de alumnos propensos a consumir alcohol en relación a otras características, es deseable minimizar el error de estimación para la proporción de cada subgrupo generado por los valores de las variables de interés. Ya que estos valores probablemente no tengan una distribución uniforme en la población total, es posible que un MAS dé como resultado un número de observaciones reducido para algunos subgrupos, con un error de estimación elevado como consecuencia.
+
+---
+
+$$\text{Cov}(\bar{X},\bar{Y}) = \left(1-\frac{n}{N}\right)\frac{\sigma_{xy}}{n}, \sigma_{xy} = \frac{1}{N-1}\sum_{i=1}^N \left( x_i - \mu_x \right) \left( y_i - \mu_y \right)$$
+
+$$\text{Cov}(\bar{X},\bar{Y}) = \mathrm{E}\left[\left(\bar{X}-\mathrm{E}\bar{X}\right)\left(\bar{Y}-\mathrm{E}\bar{Y}\right)\right]= \mathrm{E}\left[\bar{X}\bar{Y}\right] - \mu_x\mu_y$$
+
+$$\mathrm{E}\left[\bar{X}\bar{Y}\right] = \mathrm{E}\left[\frac{1}{n}\sum_{i=1}^N x_i\delta_i\frac{1}{n}\sum_{i=1}^N y_i\delta_i\right] = \frac{1}{n^2}\mathrm{E}\left[\left(x_1\delta_1 + x_2\delta_2 + ... + x_N\delta_N\right)\left(y_1\delta_1 + y_2\delta_2 + ... + y_N\delta_N\right)\right]$$
+
+$$\left(x_1\delta_1 + x_2\delta_2 + ... + x_N\delta_N\right)\left(y_1\delta_1 + y_2\delta_2 + ... + y_N\delta_N\right) = \sum_{i=1}^N x_iy_i\delta_i^2 + \sum_{j\neq 1}^N x_1\delta_1y_j\delta_j + \sum_{j\neq 2}^N x_2\delta_2y_j\delta_j + ...+ \sum_{j\neq N}^N x_N\delta_Ny_j\delta_j$$
+
+$$\mathrm{E}\left[\sum_{i=1}^N x_iy_i\delta_i^2\right] = \sum_{i=1}^N x_iy_i\mathrm{E}\left[\delta_i^2\right] = \frac{n}{N} \sum_{i=1}^N x_iy_i$$
+Posible paso dudoso (verificar Edidj):
+
+$$\mathrm{E}\left[\sum_{j\neq i}^N x_iy_j\delta_i\delta_j\right] = \sum_{j\neq i}^N x_iy_j\mathrm{E}\left[\delta_i\delta_j\right] = \frac{n}{N}\left(\frac{n-1}{N-1}\right)x_i\sum_{j\neq i}^Ny_j = \frac{n}{N}\left(\frac{n-1}{N-1}\right)x_i\left(N\mu_y - y_i\right)$$
+
+$$\mathrm{E}\left[\bar{X}\bar{Y}\right] = \frac{1}{n^2}\left(\frac{n}{N} \sum_{i=1}^N x_iy_i + \frac{n}{N}\left(\frac{n-1}{N-1}\right)\sum_{i=1}^N x_i\left(N\mu_y - y_i\right)\right)$$
+
+$$\sum_{i=1}^N x_i\left(N\mu_y - y_i\right) = \sum_{i=1}^N x_iN\mu_y - \sum_{i=1}^N x_iy_i = N^2 \mu_x \mu_y- \sum_{i=1}^N x_iy_i$$
+
+$$\mathrm{E}\left[\bar{X}\bar{Y}\right] = \frac{1}{nN}\left(\sum_{i=1}^N x_iy_i + \left(\frac{n-1}{N-1}\right)\left(N^2 \mu_x \mu_y- \sum_{i=1}^N x_iy_i\right)\right)$$
+
+$$\text{Cov}(\bar{X},\bar{Y}) = \frac{1}{nN}S - \frac{n-1}{nN(N-1)}S+\frac{N(n-1)}{n(N-1)}\mu_x\mu_y - \mu_x\mu_y=S \frac{N-n}{nN(N-1)} - \mu_x\mu_y\frac{N-n}{n(N-1)} = \frac{N-n}{n(N-1)}\left(\frac{S}{N}-\mu_x\mu_y\right) = \frac{N-n}{nN}\sigma_{xy} = \left(1-\frac{n}{N}\right)\frac{\sigma_{xy}}{n}$$
