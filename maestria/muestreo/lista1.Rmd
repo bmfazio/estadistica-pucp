@@ -77,6 +77,16 @@ Reemplazamos en la expresión de la covarianza con la notación dada anteriormen
 
 ---
 
+$$\sigma_{xy} = \frac{1}{N-1}\left(S - N\mu_x\mu_y\right)\ \mathrm{E}\left[\bar X\bar Y\right] = \frac{n}{N}S + \frac{n(n-1)}{N(N-1)}\left(N^2\mu_x\mu_y - S\right)\ $$ $$\frac{1-N}{n(n-1)}\mathrm{E}\left[\bar X\bar Y\right] = \frac{1-N}{N(n-1)}S - N\mu_x\mu_y + \frac{S}{N}$$
+
+$$\frac{1-N}{n(n-1)}\mathrm{E}\left[\bar{X}\bar{Y}\right] = \frac{n-N}{N(n-1)}S - N\mu_x\mu_y$$
+
+$$s_{xy}=\frac{N-1}{n-1}XY-\frac{N-1}{n(n-1)}\bar{X}\bar{Y}$$
+
+$$s_{xy}=\frac{N-1}{n-1}\left(XY-\bar{X}\bar{Y}\right)$$
+
+---
+
 ## Ejercicio 27
 
 En una investigación para estudiar la relación entre la propensión al consumo de alcohol por parte de adolescentes varones y variables como el control parental, regulación emocional y madurez social, se desea tomar un MASs para sólo el distrito de San Miguel. Puesto que la propensión se medirá mediante una proporción, es de interés estimar esta proporción con un margen de error no mayor a 0.07 y un nivel de confianza del 95%. Usando en lo posible el paquete survey de R.
@@ -160,8 +170,6 @@ svyciprop(~I(`Gestión / Dependencia`=="Privada"), muestra_svy)
 3. ¿Cree usted que el diseño MASs empleado sea apropiado para los fines de este estudio? Indique si no fuera el caso, qué dificultades acarrea este diseño.
 
 ---
-
-***
 
 No. Dado que el estudio tiene como meta comparar la proporción de alumnos propensos a consumir alcohol en relación a otras características, es deseable minimizar el error de estimación para la proporción de cada subgrupo generado por los valores de las variables de interés. Ya que estos valores probablemente no tengan una distribución uniforme en la población total, es posible que un MAS dé como resultado un número de observaciones reducido para algunos subgrupos, con un error de estimación elevado como consecuencia.
 
