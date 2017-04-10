@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+setwd("C:/Users/bfazio/Desktop/analisis/tecmues")
 r2 <- function(x) round(x,2)
 library(data.table)
 library(magrittr)
@@ -77,13 +78,32 @@ Reemplazamos en la expresión de la covarianza con la notación dada anteriormen
 
 ---
 
-$$\sigma_{xy} = \frac{1}{N-1}\left(S - N\mu_x\mu_y\right)\ \mathrm{E}\left[\bar X\bar Y\right] = \frac{n}{N}S + \frac{n(n-1)}{N(N-1)}\left(N^2\mu_x\mu_y - S\right)\ $$ $$\frac{1-N}{n(n-1)}\mathrm{E}\left[\bar X\bar Y\right] = \frac{1-N}{N(n-1)}S - N\mu_x\mu_y + \frac{S}{N}$$
+Partimos de la expresión para la esperanza del producto de medias muestrales:
 
-$$\frac{1-N}{n(n-1)}\mathrm{E}\left[\bar{X}\bar{Y}\right] = \frac{n-N}{N(n-1)}S - N\mu_x\mu_y$$
+\begin{align}
+\mathrm{E}\left[\bar X\bar Y\right] & = \left(\frac{n-N}{nN(1-N)}\right)S-\frac{(n-1)}{n(1-N)}N\mu_x\mu_y\\
+\frac{n(1-N)}{(n-1)}\mathrm{E}\left[\bar X\bar Y\right] & = \left(\frac{n-N}{N(n-1)}\right)S-N\mu_x\mu_y\\
+\end{align}
 
-$$s_{xy}=\frac{N-1}{n-1}XY-\frac{N-1}{n(n-1)}\bar{X}\bar{Y}$$
+Buscamos un término que lleve el coeficiente de la sumatoria $S$ a la unidad:
 
-$$s_{xy}=\frac{N-1}{n-1}\left(XY-\bar{X}\bar{Y}\right)$$
+\begin{align}
+\frac{n-N}{N(n-1)} + k & = 1 \rightarrow k=\frac{n(N-1)}{N(n-1)}\\
+\end{align}
+
+Expresamos la covarianza poblacional usando los términos desarrollados:
+
+\begin{align}
+\sigma_{xy} & = \frac{1}{N-1}\left(\frac{n(1-N)}{n-1}\mathrm{E}\left[\bar{X}\bar{Y}\right] + \frac{n(N-1)}{N(n-1)}S\right)\\
+& = \frac{1}{n-1}\left(\frac{n}{N}S - n\mathrm{E}\left[\bar{X}\bar{Y}\right]\right)\\
+\end{align}
+
+Finalmente, usamos $\mathrm{E}\left[XY\right] = \frac{n}{N}S$ y propiedades de la esperanza para generar una expresión que solo depende de los valores observados en la muestra:
+
+\begin{align}
+\sigma_{xy} & = \frac{1}{n-1}\left(\mathrm{E}\left[XY\right] - n\mathrm{E}\left[\bar{X}\bar{Y}\right]\right)\\
+\sigma_{xy} & = \mathrm{E}\left[ \underbrace{\frac{1}{n-1}\left(XY\ - n\bar{X}\bar{Y}\right)}_{\text{estimador}} \right]\\
+\end{align}
 
 ---
 
@@ -106,7 +126,7 @@ Dados los datos del problema: $z_{.975} = 1.96$, $e = 0.07$. Desconocemos la pro
 ```{r, results='hide'}
 z <- qnorm(0.975); e <- 0.07; p <- 0.5
 
-iiee <- fread("D:/minedu.csv")[,`Alumnos (2016)`:=as.double(`Alumnos (2016)`)]
+iiee <- fread("minedu.csv")[,`Alumnos (2016)`:=as.double(`Alumnos (2016)`)]
 iiee[Género=="Mixto",`Alumnos (2016)`:=`Alumnos (2016)`*0.5] #Asumimos que los colegios mixtos tienen 50% de alumnos varones
 N <- sum(iiee$`Alumnos (2016)`)
 ```
