@@ -8,10 +8,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-setwd("C:/Users/bfazio/Desktop/analisis/tecmues")
+workdir <- "D:/"
 r2 <- function(x) round(x,2)
-library(data.table)
-library(magrittr)
 ```
 
 ## Ejercicio 22
@@ -91,18 +89,19 @@ Buscamos un término que lleve el coeficiente de la sumatoria $S$ a la unidad:
 \frac{n-N}{N(n-1)} + k & = 1 \rightarrow k=\frac{n(N-1)}{N(n-1)}\\
 \end{align}
 
+Por el ejercicio anterior, sabemos que:
+
+\begin{align}
+\mathrm{E}\left[\sum^n XY\right] & = \mathrm{E}\left[\sum_{i=1}^N x_iy_i\delta_i^2\right] = \frac{n}{N}S\\
+\end{align}
+
 Expresamos la covarianza poblacional usando los términos desarrollados:
 
 \begin{align}
 \sigma_{xy} & = \frac{1}{N-1}\left(\frac{n(1-N)}{n-1}\mathrm{E}\left[\bar{X}\bar{Y}\right] + \frac{n(N-1)}{N(n-1)}S\right)\\
 & = \frac{1}{n-1}\left(\frac{n}{N}S - n\mathrm{E}\left[\bar{X}\bar{Y}\right]\right)\\
-\end{align}
-
-Finalmente, usamos $\mathrm{E}\left[XY\right] = \frac{n}{N}S$ y propiedades de la esperanza para generar una expresión que solo depende de los valores observados en la muestra:
-
-\begin{align}
-\sigma_{xy} & = \frac{1}{n-1}\left(\mathrm{E}\left[XY\right] - n\mathrm{E}\left[\bar{X}\bar{Y}\right]\right)\\
-\sigma_{xy} & = \mathrm{E}\left[ \underbrace{\frac{1}{n-1}\left(XY\ - n\bar{X}\bar{Y}\right)}_{\text{estimador}} \right]\\
+& = \frac{1}{n-1}\left(\mathrm{E}\left[\sum^n XY\right] - n\mathrm{E}\left[\bar{X}\bar{Y}\right]\right)\\
+& = \mathrm{E}\left[ \underbrace{\frac{1}{n-1}\left(\sum^n XY\ - n\bar{X}\bar{Y}\right)}_{\text{estimador}} \right]\\
 \end{align}
 
 ---
@@ -121,13 +120,14 @@ $$\text{IC} = \left[ \bar{p} - z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n-
 Definiendo el error de estimación como $e = \left|p-\bar{p}\right|$, el intervalo anterior implica:
 
 $$e = z_{1-\alpha/2} \sqrt{\frac{\bar{p}(1-\bar{p})}{n} \left( 1 - \frac{n}{N} \right)} \rightarrow n = \frac{z^2_{1-\alpha/2} \bar{p}(1-\bar{p}) N}{z^2_{1-\alpha/2} \bar{p}(1-\bar{p}) + e^2 N}$$
-Dados los datos del problema: $z_{.975} = 1.96$, $e = 0.07$. Desconocemos la proporción poblacional de propensión al consumo de alcohol, así que asumimos $\bar{p} = 0.5$. Para determinar $N$ debemos examinar nuestro marco muestral, dado por la cantidad de alumnos varones cursando secundaria en IIEE del distrito de San Miguel:
+Dados los datos del problema: $z_{.975} \approx 1.96$, $e = 0.07$. Desconocemos la proporción poblacional de propensión al consumo de alcohol, así que asumimos $\bar{p} = 0.5$. Para determinar $N$ debemos examinar nuestro marco muestral, dado por la cantidad de alumnos varones cursando secundaria en IIEE del distrito de San Miguel. Dado que no contamos con el detalle del número de alumnos por género en colegios mixtos, asumimos una proporción de 0.5 para estos casos.
 
 ```{r, results='hide'}
 z <- qnorm(0.975); e <- 0.07; p <- 0.5
 
-iiee <- fread("minedu.csv")[,`Alumnos (2016)`:=as.double(`Alumnos (2016)`)]
-iiee[Género=="Mixto",`Alumnos (2016)`:=`Alumnos (2016)`*0.5] #Asumimos que los colegios mixtos tienen 50% de alumnos varones
+library(data.table)
+iiee <- fread(paste0(workdir,"minedu.csv"))[,`Alumnos (2016)`:=as.double(`Alumnos (2016)`)]
+iiee[Género=="Mixto",`Alumnos (2016)`:=`Alumnos (2016)`*0.5]
 N <- sum(iiee$`Alumnos (2016)`)
 ```
 
@@ -180,7 +180,7 @@ cat(paste("Total de alumnos en colegios de varones:",r2(N_varon),"IC95: [",r2(Ni
 Verificamos que nuestros resultados, salvo por diferencias de redondeo, concuerdan con la salida del paquete `survey`:
 ```{r,results='hold',message=FALSE, warning=FALSE}
 library(survey)
-muestra_svy <- svydesign(id=~1,fpc=rep(N,nrow(muestra)),data=muestra)
+muestra_svy <- svydesign(id=~1,fpc=rep(N,n),data=muestra)
 
 svytotal(~I(Género=="Varones"), muestra_svy)
 svyciprop(~I(`Gestión / Dependencia`=="Privada"), muestra_svy)
