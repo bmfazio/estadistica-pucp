@@ -1,7 +1,7 @@
 ---
 title: "Lista 1 - Técnicas de Muestreo"
 author: "Boris M Fazio"
-date: "2017-04-22"
+date: "2017-04-10"
 output: html_document
 ---
 
@@ -76,6 +76,35 @@ Reemplazamos en la expresión de la covarianza con la notación dada anteriormen
 
 ---
 
+#### Medias conocidas
+
+Por el ejercicio anterior, sabemos que:
+
+\begin{align}
+\mathrm{E}\left[\sum^n XY\right] & = \mathrm{E}\left[\sum_{i=1}^N x_iy_i\delta_i^2\right] = \frac{n}{N}S\\
+\end{align}
+
+Podemos efectuar un reemplazo directo en la fórmula de la covarianza poblacional:
+
+\begin{align}
+\sigma_{xy} & = \frac{1}{N-1}\left( S - N\mu_x\mu_y \right)\\
+& = \frac{1}{N-1}\left( \frac{N}{n}\frac{n}{N}S - N\mu_x\mu_y \right)\\
+& = \frac{1}{N-1}\left( \frac{N}{n}\mathrm{E}\left[\sum^n XY\right] - N\mu_x\mu_y \right)\\
+& = \mathrm{E}\left[\underbrace{\frac{1}{N-1}\left( \frac{N}{n}\sum^n XY - N\mu_x\mu_y \right)}_{\text{estimador}}\right]
+\end{align}
+
+#### Una media conocida
+
+Dado que la media muestral es un estimador insesgado de la media poblacional, podemos sustituir la media desconocida en la expresión anterior:
+
+\begin{align}
+\sigma_{xy} & = \frac{1}{N-1}\left( \frac{N}{n}\mathrm{E}\left[\sum^n XY\right] - N\mu_x\mu_y \right)\\
+& = \frac{1}{N-1}\left( \frac{N}{n}\mathrm{E}\left[\sum^n XY\right] - N\mathrm{E}\left[\bar{X}\right]\mu_y \right)\\
+& = \mathrm{E}\left[\underbrace{\frac{1}{N-1}\left( \frac{N}{n}\sum^n XY - N\bar{X}\mu_y \right)}_{\text{estimador}}\right]\\
+\end{align}
+
+#### Medias desconocidas
+
 Partimos de la expresión para la esperanza del producto de medias muestrales:
 
 \begin{align}
@@ -87,12 +116,6 @@ Buscamos un término que lleve el coeficiente de la sumatoria $S$ a la unidad:
 
 \begin{align}
 \frac{n-N}{N(n-1)} + k & = 1 \rightarrow k=\frac{n(N-1)}{N(n-1)}\\
-\end{align}
-
-Por el ejercicio anterior, sabemos que:
-
-\begin{align}
-\mathrm{E}\left[\sum^n XY\right] & = \mathrm{E}\left[\sum_{i=1}^N x_iy_i\delta_i^2\right] = \frac{n}{N}S\\
 \end{align}
 
 Expresamos la covarianza poblacional usando los términos desarrollados:
