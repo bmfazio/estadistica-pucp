@@ -1,0 +1,48 @@
+---
+title: "Untitled"
+author: "Boris M Fazio"
+date: "17 de abril de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## yee boi
+
+Calcule $\int_{-2}^2 e^{x+x^2}$ por simulación.
+
+```{r cars}
+#Evaluacion de integrales con NPA
+
+n <- 100000
+a <- -2
+b <- 2
+
+f <- function(x){exp(x+x**2)}
+
+#1. Genere U1...Uk valores de U(0,1) con k grande
+u <- runif(n,a,b)
+#2. Calcule g(Ui) para i = 1...k
+g <- f(u)
+#3. Finalmente, calcular media
+mean(g)*(b-a)
+```
+```{r cars}
+#Evaluacion de integrales con NPA
+
+n <- 100000
+a <- 0
+b <- 1
+
+f1 <- function(x){exp(-(x/(x-1))**2)}
+f2 <- function(x){exp(-((1-x)/x))**2}
+
+#1. Genere U1...Uk valores de U(0,1) con k grande
+u <- runif(n,a,b)
+#2. Calcule g(Ui) para i = 1...k
+g <- f1(u)+f2(u)
+#3. Finalmente, calcular media
+mean(g)*(b-a)
+```
