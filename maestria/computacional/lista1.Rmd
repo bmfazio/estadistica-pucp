@@ -1,0 +1,46 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Pregunta 1
+
+Una distribución muy usada para el análisis de datos bimodales es la distribución de mixtura de normales cuya función de densidad es dada por
+
+$$f_X(x) = p\phi(x|\mu_1,\sigma_1^2)+(1-p)\phi(x|\mu_2,\sigma_2^2), x \in \mathbb{R}$$
+donde $\mu_1,\mu_2 \in \mathbb{R}$, $\sigma_1^2,\sigma_2^2 > 0$, $p \in (0,1)$ y $\phi(.|a,b^2)$ representa la densidad de una distribución normal con media $a$ y varianza $b^2$. Utilizaremos la siguiente notación para una variable aleatoria $X$ que siga esta distribución: $X \sim \text{MN}(\mu_1,\mu_2,\sigma_1^2,\sigma_2^2,p)$
+
+a) Encuentre una expresión para la media y la varianza de esta distribución.
+
+Definimos $\phi_i = \phi(x|\mu_i,\sigma_i^2)$ y procedemos a hallar la media:
+
+\begin{align}
+\text{E}\left[X\right] &= \int_{-\infty}^\infty x(p\phi_1 + (1-p)\phi_2)dx\\
+&= \int_{-\infty}^\infty (xp\phi_1 + x(1-p)\phi_2)dx\\
+&= p\int_{-\infty}^\infty x\phi_1dx + (1-p)\int_{-\infty}^\infty x\phi_2dx\\
+&= p\mu_1 + (1-p)\mu_2 && (1)\\
+\end{align}
+
+Para hallar la varianza, primero hallamos $\text{E}\left[X^2\right]$:
+
+\begin{align}
+\text{E}\left[X^2\right] &= \int_{-\infty}^\infty x^2(p\phi_1 + (1-p)\phi_2)dx\\
+&= \int_{-\infty}^\infty (x^2p\phi_1 + x^2(1-p)\phi_2)dx\\
+&= p\int_{-\infty}^\infty t^2\phi_1dt + (1-p)\int_{-\infty}^\infty t^2\phi_2dt\\
+&= p\left(\text{E}\left[T_1^2\right] - \text{E}\left[T_1\right]^2 + \text{E}\left[T_1\right]^2\right)  + (1-p)\left(\text{E}\left[T_2^2\right] - \text{E}\left[T_2\right]^2 + \text{E}\left[T_2\right]^2\right) && \text{Definimos $T_i \sim N(\mu_i,\sigma_i^2)$}\\
+&= p\left(\sigma_1^2 + \mu_1^2\right) + (1-p)\left(\sigma_2^2 + \mu_2^2\right) && (2)\\
+\\
+\text{Var}\left[X\right] &= \text{E}\left[X^2\right] - \text{E}\left[X\right]^2\\
+&= p\left(\sigma_1^2 + \mu_1^2\right) + (1-p)\left(\sigma_2^2 + \mu_2^2\right) - \left(p\mu_1 + (1-p)\mu_2\right)^2 && \text{Usamos $(1)$ y $(2)$}\\
+\end{align}
+
+b) Pruebe la siguiente propiedad:
+Sea $W \sim \text{Bernoulli}(p)$ y $X$ otra v.a. tal que su distribución condicional a $W$ es dad por
+
+$$X | W = 1 \sim \text{N}(\mu_1,\sigma_1^2)\\
+X | W = 0 \sim \text{N}(\mu_2,\sigma_2^2)$$
+
+entonces $X \sim \text{MN}(\mu_1,\mu_2,\sigma_1^2,\sigma_2^2)$.
+```{r}
+"nigga wuhh"
+```
