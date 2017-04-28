@@ -1,9 +1,4 @@
----
-title: "R Notebook"
-output: html_notebook
----
-
-## Pregunta 1
+Pregunta 1
 
 Una distribución muy usada para el análisis de datos bimodales es la distribución de mixtura de normales cuya función de densidad es dada por
 
@@ -31,16 +26,36 @@ Para hallar la varianza, primero hallamos $\text{E}\left[X^2\right]$:
 &= p\left(\sigma_1^2 + \mu_1^2\right) + (1-p)\left(\sigma_2^2 + \mu_2^2\right) && (2)\\
 \\
 \text{Var}\left[X\right] &= \text{E}\left[X^2\right] - \text{E}\left[X\right]^2\\
-&= p\left(\sigma_1^2 + \mu_1^2\right) + (1-p)\left(\sigma_2^2 + \mu_2^2\right) - \left(p\mu_1 + (1-p)\mu_2\right)^2 && \text{Usamos $(1)$ y $(2)$}\\
+&= p\left(\sigma_1^2 + \mu_1^2\right) + (1-p)\left(\sigma_2^2 + \mu_2^2\right) - \left(p\mu_1 + (1-p)\mu_2\right)^2 && \text{Usando $(1)$ y $(2)$}\\
 \end{align}
 
 b) Pruebe la siguiente propiedad:
-Sea $W \sim \text{Bernoulli}(p)$ y $X$ otra v.a. tal que su distribución condicional a $W$ es dad por
+Sea $W \sim \text{Bernoulli}(p)$ y $X$ otra v.a. tal que su distribución condicional a $W$ es dada por
 
 $$X | W = 1 \sim \text{N}(\mu_1,\sigma_1^2)\\
 X | W = 0 \sim \text{N}(\mu_2,\sigma_2^2)$$
 
 entonces $X \sim \text{MN}(\mu_1,\mu_2,\sigma_1^2,\sigma_2^2)$.
-```{r}
-"nigga wuhh"
-```
+
+Tenemos:
+
+\begin{align}
+f_W(w) &= \begin{cases}
+p,  & \text{si $w = 1$} \\
+1-p, & \text{si $w = 0$}
+\end{cases} &(1)\\
+f_X(x|w) & = \begin{cases}
+\phi_1,  & \text{si $w = 1$} \\
+\phi_2, & \text{si $w = 0$}
+\end{cases} &(2)\\
+\end{align}
+
+Nos interesa calcular $f_X$, la densidad marginal de $X$. Usamos la regla de probabilidad total con la partición dada por los valores de $W$:
+
+\begin{align}
+f_X(x) &= f_{XW}(x,1) + f_{XW}(x,0)\\
+&= f_W(1)f_{X}(x|1) + f_W(0)f_{X}(x|0) &\text{Regla del producto}\\
+&= p\phi_1 + (1-p)\phi_2 &\text{Por definiciones $(1)$ y $(2)$}\\
+&= p\phi(x|\mu_1,\sigma_1^2)+(1-p)\phi(x|\mu_2,\sigma_2^2)\\
+&\mathbb{LISTO}\text{   }\mathbb{CAUSITA}
+\end{align}
