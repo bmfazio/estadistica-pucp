@@ -1,0 +1,37 @@
+---
+title: "Untitled"
+author: "Boris M Fazio"
+date: "17 de abril de 2017"
+output: html_document
+---
+
+1)      Introducción: descripción del problema y de los objectivos del estudio.
+
+Observaciones de varios países muestran que la proporción de habitantes con sobrepeso u obesidad tiende a incrementar cuando las condiciones económicas del país mejoran, y estas ganancias de peso no se distribuyen de forma idéntica sobre toda la población. Ya que el exceso de grasa corporal está asociado a un mayor riesgo de enfermedades cardiovasculares y desórdenes metabólicos,[REF?] es útil entender 
+
+
+
+2)      Datos: descripción de los datos, inclusivo de su orígen y referencia bibliográfica o de internet. Número de observaciones, de caracteres, tipo de caracteres (qualitativos, quantitativos), su significado. Si conocido, como fueron observados.
+3)      Métodos: hay que explicar que tal el particular model utilizado, de como se ha organizado el trabajo, como se han organizados las regresiones, cuales se han hechas y porque, el tipo de testes efectuados para averiguar si los datos cumplen con las condiciones de aplicabilidad del modelo lineal u sino que tipo de transformaciones se hicieron para que cumple y porque, que tablas de ANOVA y porque, etc.
+
+Modelo central: IMC ~ sexo + edad + region + ambito + 
+
+4)      Resultados: resultados de la aplicación de lm de R à los datos; salidas R y gráficos comentadas: que significan los coeficientes, como se leen los resultados de los testes, de los gráficos, etc.
+5)      Discusión y conclusiones: discusión de los resultados en relación con lo que se esperaba (porque fueron buenos, porque no fueron buenos, que falta, etc.).
+6)      Bibliografía, en particular para los datos.
+
+
+## Descripcion general del proceso de modelado
+
+0. Determinar el fenómeno que se busca describir
+  - La relación entre etnicidad e IMC a través del tiempo
+
+1. Elegir un modelo para estudiar el modelo
+  - Regresión lineal
+
+2. Determinar proceso de selección de variables
+  - En base a literatura previa se inicia con modelo completo
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
