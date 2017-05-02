@@ -53,7 +53,7 @@ El evento descrito en este enunciado puede escribirse de la siguiente manera:
 
 $$D = \{(N_1 \cap N_2, G_2),(G_1, N_1 \cap N_2) \mid G_i \in \mathcal{P}_{10}(N_i) - \{N_1 \cap N_2\}\}$$
 
-El espacio de probabilidad se define de manera similar, con los mismos $\Omega$, $P$ y un $\mathcal{F}$ que incluya a $D$.
+El espacio de probabilidad se define de manera similar, con los mismos $\Omega$, $P$ y un $\mathcal{F} \mid D \in \mathcal{F}$.
 
 Procedemos con el cálculo:
 
@@ -71,7 +71,7 @@ En el contexto del ejercicio 29 se define $X$ como el número de elementos comun
 
 1. Determine $f$, el modelo probabilístico de $X$.
 
-Dados los pares $(S_1, S_2) \in \Omega$:
+Dado un par $(S_1, S_2) \in \Omega$:
 
 $$X = \#(S_1 \cap S_2)$$
 
