@@ -1,0 +1,80 @@
+---
+title: "Lista de Ejercicios 2"
+author: "Boris Manuel Fazio Luna"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## Ejercicio 29
+
+Considere las poblaciones de unidades $N_1 = \{1,...,30\}$ y $N_2 = \{21,...,50\}$. De cada población se escogerá una muestra de 10 unidades.
+
+1. Describa $\Omega$, el espacio muestral asociado a este experimento.
+
+Asumiendo que el muestreo se realiza sin reemplazo, podemos describir $\Omega$ como el conjunto de todos los pares ordenados cuyo primer elemento es un subconjunto de tamaño 10 de $N_1$ y el segundo elemento es un subconjunto de tamaño 10 de elementos de $N_2$.
+
+La descripción anterior puede ser planteada en términos de la siguiente notación:
+
+\begin{align}
+\Omega &= \{(S_1,S_2)\mid S_1 \in \mathcal{P}_{10}(N_1), S_2 \in \mathcal{P}_{10}(N_2)\}\\
+&\text{donde }\\
+\mathcal{P}_i(K) &= \{J \mid J \subset K, \#(J) = i \}
+\end{align}
+
+2. Determine la probabilidad de que todos los elementos comunes (a ambas poblaciones) se escojan en cada muestra.
+
+Haicendo uso de la notación desarrollada previamente, este enunciado hace referencia al siguiente evento:
+
+$$C = \{\left(N_1 \cap N_2, N_1 \cap N_2\right)\}$$
+Para calcular $P(C)$ primero necesitamos definir alguna función de probabilidad. La regla de *probabilidad clásica* es razonable para este problema:
+
+$$P(A) = \frac{\# (A)}{\# (\Omega)}$$
+Es necesario contar con un espacio de probabilidad bien definido para realizar cálculos en general; sin embargo, es sencillo ver que la cantidad de interés, $P(C)$, está definida idénticamente mientras se elija cualquier miembro del conjunto
+
+$$\{\mathcal{F}|\mathcal{F}\text{ es $\sigma$-álgebra de $\Omega$, } C \in \mathcal{F}\}$$
+
+Entonces, con $(\Omega,\mathcal{F},P)$ definido, podemos proceder a realizar el cálculo:
+
+\begin{align}
+\#(C) &= \#(\{N_1 \cap N_2\})\\
+&= 1\\
+\\
+\#(\Omega) &= \#(\mathcal{P}_{10}(N_1)) \times \#(\mathcal{P}_{10}(N_2))\\
+&= \binom{30}{10} \times \binom{30}{10}\\
+&= \left(\frac{30!}{20! 10!}\right)^2\\
+\\
+\therefore P(C) &= \left(\frac{20! 10!}{30!}\right)^{2}
+\end{align}
+
+3. Halle la probabilidad de que todos los elementos comunes (a ambas poblaciones) se escojan solamente en una de las dos muestras.
+
+El evento descrito en este enunciado puede escribirse de la siguiente manera:
+
+$$D = \{(N_1 \cap N_2, G_2),(G_1, N_1 \cap N_2) \mid G_i \in \mathcal{P}_{10}(N_i) - \{N_1 \cap N_2\}\}$$
+
+El espacio de probabilidad se define de manera similar, con los mismos $\Omega$, $P$ y un $\mathcal{F}$ que incluya a $D$.
+
+Procedemos con el cálculo:
+
+\begin{align}
+\#(D) &= \#(\{N_1 \cap N_2\}) \times \#(G_2) + \#(G_1)  \times \#(\{N_1 \cap N_2\})\\
+&= 1 \times \left(\binom{30}{10} - 1\right) + \left(\binom{30}{10} - 1\right) \times 1\\
+&= 2 \times \left(\binom{30}{10} - 1\right)\\
+\\
+\therefore P(D) &= 2 \times \frac{\left(\binom{30}{10} - 1\right)}{\left(\frac{30!}{20! 10!}\right)^2} &\text{con $\#(\Omega)$ calculado anteriormente}
+\end{align}
+
+## Ejercicio 30
+
+En el contexto del ejercicio 29 se define $X$ como el número de elementos comunes en las muestras.
+
+1. Determine $f$, el modelo probabilístico de $X$.
+
+Dados los pares $(S_1, S_2) \in \Omega$:
+
+$$X = \#(S_1 \cap S_2)$$
+
+Vista esta definición, todos los resultados en $\Omega$ son de interés. Por lo tanto, el espacio de probabilidad a usar será $(\Omega, \mathcal{F}, P)$, con $\mathcal{F} = 2^\Omega$ y $\Omega$, $P$ definidos anteriormente.
+
+Para 
