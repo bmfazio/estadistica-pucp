@@ -59,3 +59,33 @@ f_X(x) &= f_{XW}(x,1) + f_{XW}(x,0)\\
 &= p\phi(x|\mu_1,\sigma_1^2)+(1-p)\phi(x|\mu_2,\sigma_2^2)\\
 &\mathbb{LISTO}\text{   }\mathbb{CAUSITA}
 \end{align}
+
+d) Presente los pasos que debe seguir el algoritmo de Metropolis-Hastings considerando como distribución generadora de candidatos una distribución normal centrada en el punto anterior. Implemente en R el algoritmo propuesto. Simule 10 000 valores de una $\text{MN}(2, 8, 1, 4, 0.2)$ y verifique mediante gráficos de cadenas, histograma con función de densidad y cuantiles que el método propuesto funciona correctamente.
+
+```{r}
+n <- 50000
+s <- c(5,numeric(n))
+
+u1 <- 2; u2 <- 8; sd1 <- 1; sd2 <- 4; p <-0.2
+
+sdq <- 2.4
+
+d_obj <- function(x){p*dnorm(x,u1,sd1)+(1-p)*dnorm(x,u2,sd2)}
+d_can <- function(x,u){dnorm(x,u,sdq)}
+
+alpha <- function(x,y,f,q){
+  min(1,f(y)*q(x,y)/(f(x)*q(y,x)))
+}
+
+for(i in 1:(length(s)-1)){
+  candidato <- rnorm(1,s[i],sdq)
+  if(runif(1)<=alpha(s[i],candidato,d_obj,d_can)){
+    s[i+1] <- candidato
+  } else {
+    s[i+1] <- s[i]
+  }
+  
+}
+
+hist(s)
+```
