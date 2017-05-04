@@ -71,17 +71,28 @@ En el contexto del ejercicio 29 se define $X$ como el número de elementos comun
 
 1. Determine $f$, el modelo probabilístico de $X$.
 
-Por simplicidad, nos colocamos en el espacio $(\Omega,2^\Omega,P)$. Vemos que la definicion dada equivale a decir $X = \#(S_1 \cap S_2)$, entonces $R_X = \{0,...,10\}$. Para poder determinar $f$, necesitamos calcular $P(X=x) = P(\{(S_1,S_2) \in \Omega |\#(S_1 \cap S_2) = x\})$, para cada $x \mid x \in R_X$:
+Por simplicidad, nos colocamos en el espacio $(\Omega,2^\Omega,P)$. Vemos que la definicion dada equivale a decir $X = \#(S_1 \cap S_2)$, entonces $R_X = \{0,...,10\}$. Para poder determinar $f$, necesitamos $P(X=x) = P(\{(S_1,S_2) \in \Omega |\#(S_1 \cap S_2) = x\})$, para cada $x \mid x \in R_X$.
 
-\begin{align}
-\#(\Omega) \times P(X = 0) &= \#\{S_1 \mid \#(S_1 \cap (N_1 \cap N_2)) = 0\} \times \#\{S_2 \mid \#(S_2 \cap (N_1 \cap N_2)) = 0,...,10\} +&\\
-&\qquad \#\{S_1 \mid \#(S_1 \cap (N_1 \cap N_2)) = 1\} \times \#\{S_2 \mid \#(S_2 \cap (N_1 \cap N_2)) = 0,...,9\} +&\\
-. . . +&&\\
-&\qquad \#\{S_1 \mid \#(S_1 \cap (N_1 \cap N_2)) = 10\} \times \#\{S_2 \mid \#(S_2 \cap (N_1 \cap N_2)) = 0\}\\
-&=1\\
-\\
-P(X = 9)\#(\Omega) &= \binom{10}{10} \times \binom{10}{10}\\
-&=1\\
-\\
+Ya hemos calculado $\#(\Omega)$ previamente. Para poder especificar $P(X=x)$ nos hace falta determinar $\#(\{(S_1,S_2) \in \Omega |\#(S_1 \cap S_2) = x\})$. Podemos contar los elementos de dicho conjunto mediante el siguiente procedimiento:
 
-\end{align}
+* Contamos el número de maneras de seleccionar $x$ elementos de $N_1 \cap N_2$ que pertenezcan a $S_1 \cap S_2$: $\binom{10}{x}$
+
+* Contamos el número de maneras de seleccionar $y$ elementos de $N_1 \cap N_2$ que solo pertenezcan a $S_1$: $\binom{10-x}{y}$
+
+* Contamos el número de maneras de seleccionar el resto de elementos de $S_1$: $\binom{20}{10-x-y}$
+
+* Contamos el número de maneras de seleccionar el resto de elementos de $S_2$: $\binom{30-x-y}{10-x}$
+
+* Realizamos la sumatoria sobre el posible número de elementos no comunes de $S_1$, es decir $y = 0,...,(10-x)$
+
+Entonces, la probabilidad de observar $X=x$ está dada por:
+
+$$P(X=x) = \frac{\sum_{y=0}^{10-x}{10 \choose x}{10-x \choose y}{20 \choose 10-x-y}{30-x-y \choose 10-x}}{{30 \choose 10}^2}$$
+
+Dado que $\Omega$ es un conjunto finito, $X$ es una variable aleatoria discreta. Su modelo probabilístico queda determinado a partir de la función arriba descrita:
+
+$$f(x) = \begin{cases}P(X=x)&\forall x \in R_X\\0&\forall x \notin R_X\end{cases}$$
+
+2. Halle la probabilidad de seleccionar más de tres elementos comunes. Use $f$.
+
+3. Determine e interprete $\text{E}(X)$.
