@@ -140,4 +140,4 @@ for(x in 0:10){
 total
 ```
 
-Entonces podemos decir que, al tomar un gran número de muestras
+Entonces podemos decir que, si realizamos muestreos aleatorios sucesivos de las poblaciones $N_1$ y $N_2$, con $n=10$, esperamos que el promedio de elementos comunes sea cercano a $1.\overline{1}$.
