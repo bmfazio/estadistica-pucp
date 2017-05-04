@@ -1,0 +1,27 @@
+---
+title: "Untitled"
+author: "Boris M Fazio"
+date: "17 de abril de 2017"
+output: html_document
+---
+
+1)      Introducción: descripción del problema y de los objectivos del estudio.
+
+Observaciones de varios países muestran que la proporción de habitantes con sobrepeso u obesidad tiende a incrementar cuando las condiciones económicas del país mejoran, y estas ganancias de peso no se distribuyen de forma idéntica sobre toda la población. Ya que el exceso de grasa corporal está asociado a un mayor riesgo de enfermedades cardiovasculares y desórdenes metabólicos,[REF?] conocer las características de los grupos en los que han ocurrido estos incrementos provee evidencia útil para guiar acciones de salud pública.
+
+Una fuente que permite evaluar tales tendencias es la Encuesta Nacional Demográfica y de Salud Familiar (ENDES). Esta encuesta se realiza anualmente y consiste en la aplicación de un cuestionario que recoge principalmente información sobre mujeres de 15 a 49 años, niños menores de 5 años y el hogar en el que habitan. El diseño muestral es probabilístico, estratificado y de dos etapas y está orientado a conseguir estimaciones confiables para las 24 regiones del país. Además del cuestionario, también se toman algunas medidas biométricas, incluyendo la altura y peso de la mujer entrevistada; tomadas en conjunto ambas variables permiten calcular el Índice de Masa Corporal (IMC) que es una medida frecuentemente usada para estimar el grado de acumulación de grasa corporal.
+
+El propósito de este documento es presentar un análisis de regresión múltiple que permita 
+
+#Aunque la publicación anual de los datos de la encuesta viene acompañada de un reporte de resultados que incluye cifras de años previos, solo se muestran comparaciones bivariadas de los valores puntuales, lo cual no permite una evaluación rigurosa de los factores de mayor influencia sobre el exceso de peso en la población.
+
+
+2)      Datos: descripción de los datos, inclusivo de su orígen y referencia bibliográfica o de internet. Número de observaciones, de caracteres, tipo de caracteres (qualitativos, quantitativos), su significado. Si conocido, como fueron observados.
+3)      Métodos: hay que explicar que tal el particular model utilizado, de como se ha organizado el trabajo, como se han organizados las regresiones, cuales se han hechas y porque, el tipo de testes efectuados para averiguar si los datos cumplen con las condiciones de aplicabilidad del modelo lineal u sino que tipo de transformaciones se hicieron para que cumple y porque, que tablas de ANOVA y porque, etc.
+4)      Resultados: resultados de la aplicación de lm de R à los datos; salidas R y gráficos comentadas: que significan los coeficientes, como se leen los resultados de los testes, de los gráficos, etc.
+5)      Discusión y conclusiones: discusión de los resultados en relación con lo que se esperaba (porque fueron buenos, porque no fueron buenos, que falta, etc.).
+6)      Bibliografía, en particular para los datos.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
