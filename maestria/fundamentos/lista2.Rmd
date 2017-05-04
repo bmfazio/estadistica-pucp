@@ -95,4 +95,49 @@ $$f(x) = \begin{cases}P(X=x)&\forall x \in R_X\\0&\forall x \notin R_X\end{cases
 
 2. Halle la probabilidad de seleccionar más de tres elementos comunes. Use $f$.
 
+Escribimos la probabilidad solicitada en términos de $f$:
+
+\begin{align}
+P(X>3) &= 1 - P(X \leq 3)\\
+&= 1 - \sum_{x = 0}^3 P(X=x)\\
+&= 1 - \sum_{x = 0}^3 f(x)
+\end{align}
+
+Efectuamos el cálculo:
+
+```{r}
+omega <- choose(30,10)**2
+total <- 0
+for(x in 0:3){
+  for(y in 0:(10-x)){
+    total <- total +
+      (choose(10,x)*choose(10-x,y)*
+         choose(20,10-x-y)*choose(30-x-y,10-x))
+  }
+}
+1 - total/omega
+```
+
+De modo que $P(X>3) \approx 0.0094$.
+
 3. Determine e interprete $\text{E}(X)$.
+
+El valor esperado de $X$ está dado por:
+
+$$\text{E}(X)= \sum_{x=0}^{10}xf(x) $$
+
+Calculamos:
+
+```{r}
+total <- 0
+for(x in 0:10){
+  for(y in 0:(10-x)){
+    total <- total +
+      x*(choose(10,x)*choose(10-x,y)*
+         choose(20,10-x-y)*choose(30-x-y,10-x))/omega
+  }
+}
+total
+```
+
+Entonces podemos decir que, al tomar un gran número de muestras
