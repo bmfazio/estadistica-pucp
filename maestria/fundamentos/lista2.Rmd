@@ -12,6 +12,8 @@ Considere las poblaciones de unidades $N_1 = \{1,...,30\}$ y $N_2 = \{21,...,50\
 
 1. Describa $\Omega$, el espacio muestral asociado a este experimento.
 
+---
+
 Asumiendo que el muestreo se realiza sin reemplazo, podemos describir $\Omega$ como el conjunto de todos los pares ordenados cuyo primer elemento es un subconjunto de tamaño 10 de $N_1$ y el segundo elemento es un subconjunto de tamaño 10 de elementos de $N_2$.
 
 La descripción anterior puede ser planteada en términos de la siguiente notación:
@@ -22,9 +24,13 @@ La descripción anterior puede ser planteada en términos de la siguiente notaci
 \mathcal{P}_i(K) &= \{J \mid J \subset K, \#(J) = i \}
 \end{align}
 
+---
+
 2. Determine la probabilidad de que todos los elementos comunes (a ambas poblaciones) se escojan en cada muestra.
 
-Haicendo uso de la notación desarrollada previamente, este enunciado hace referencia al siguiente evento:
+---
+
+Haciendo uso de la notación desarrollada previamente, este enunciado hace referencia al siguiente evento:
 
 $$C = \{\left(N_1 \cap N_2, N_1 \cap N_2\right)\}$$
 Para calcular $P(C)$ primero necesitamos definir alguna función de probabilidad. La regla de *probabilidad clásica* es razonable para este problema:
@@ -47,7 +53,11 @@ Entonces, con $(\Omega,\mathcal{F},P)$ definido, podemos proceder a realizar el 
 \therefore P(C) &= \left(\frac{20! 10!}{30!}\right)^{2}
 \end{align}
 
+---
+
 3. Halle la probabilidad de que todos los elementos comunes (a ambas poblaciones) se escojan solamente en una de las dos muestras.
+
+---
 
 El evento descrito en este enunciado puede escribirse de la siguiente manera:
 
@@ -71,6 +81,8 @@ En el contexto del ejercicio 29 se define $X$ como el número de elementos comun
 
 1. Determine $f$, el modelo probabilístico de $X$.
 
+---
+
 Por simplicidad, nos colocamos en el espacio $(\Omega,2^\Omega,P)$. Vemos que la definicion dada equivale a decir $X = \#(S_1 \cap S_2)$, entonces $R_X = \{0,...,10\}$. Para poder determinar $f$, necesitamos $P(X=x) = P(\{(S_1,S_2) \in \Omega |\#(S_1 \cap S_2) = x\})$, para cada $x \mid x \in R_X$.
 
 Ya hemos calculado $\#(\Omega)$ previamente. Para poder especificar $P(X=x)$ nos hace falta determinar $\#(\{(S_1,S_2) \in \Omega |\#(S_1 \cap S_2) = x\})$. Podemos contar los elementos de dicho conjunto mediante el siguiente procedimiento:
@@ -93,7 +105,11 @@ Dado que $\Omega$ es un conjunto finito, $X$ es una variable aleatoria discreta.
 
 $$f(x) = \begin{cases}P(X=x)&\forall x \in R_X\\0&\forall x \notin R_X\end{cases}$$
 
+---
+
 2. Halle la probabilidad de seleccionar más de tres elementos comunes. Use $f$.
+
+---
 
 Escribimos la probabilidad solicitada en términos de $f$:
 
@@ -118,13 +134,24 @@ for(x in 0:3){
 1 - total/omega
 ```
 
-De modo que $P(X>3) \approx 0.0094$.
+De modo que $P(X>3) \approx 0.01$.
+
+---
 
 3. Determine e interprete $\text{E}(X)$.
+
+---
 
 El valor esperado de $X$ está dado por:
 
 $$\text{E}(X)= \sum_{x=0}^{10}xf(x) $$
+Las propiedades de la sumatoria nos permiten incorporar $x$ a la suma interna de modo que podemos reusar el algoritmo anterior con mínima modificación.
+
+\begin{align}
+\text{E}(X)&= \sum_{x=0}^{10}x\frac{\sum_{y=0}^{10-x}{10 \choose x}{10-x \choose y}{20 \choose 10-x-y}{30-x-y \choose 10-x}}{{30 \choose 10}^2}\\
+\\
+&= \sum_{x=0}^{10}\frac{\sum_{y=0}^{10-x}x{10 \choose x}{10-x \choose y}{20 \choose 10-x-y}{30-x-y \choose 10-x}}{{30 \choose 10}^2}
+\end{align}
 
 Calculamos:
 
@@ -140,4 +167,4 @@ for(x in 0:10){
 total
 ```
 
-Entonces podemos decir que, si realizamos muestreos aleatorios sucesivos de las poblaciones $N_1$ y $N_2$, con $n=10$, esperamos que el promedio de elementos comunes sea cercano a $1.\overline{1}$.
+Podemos interpretar $\text{E}(X)$ en el contexto de un experimento usando la *Ley Fuerte de los Grandes Números*. Esta ley nos dice que, si repetimos el experimento un gran número de veces, la media del número de elementos comunes observados será cercana a la esperanza. Es decir, cuando $n$ es grande, $\bar X_n \approx 1.\overline{1}$.
