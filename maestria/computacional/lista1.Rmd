@@ -87,5 +87,7 @@ for(i in 1:(length(s)-1)){
   
 }
 
+s[(length(s)-9999):length(s)]
+
 hist(s)
 ```
