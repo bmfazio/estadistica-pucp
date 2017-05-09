@@ -1,3 +1,7 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 Pregunta 1
 
 Una distribución muy usada para el análisis de datos bimodales es la distribución de mixtura de normales cuya función de densidad es dada por
@@ -59,6 +63,43 @@ f_X(x) &= f_{XW}(x,1) + f_{XW}(x,0)\\
 &= p\phi(x|\mu_1,\sigma_1^2)+(1-p)\phi(x|\mu_2,\sigma_2^2)\\
 &\mathbb{LISTO}\text{   }\mathbb{CAUSITA}
 \end{align}
+
+c) Utilice la propiedad dada en b) para proponer un algoritmo para simular valores de una v.a. $X \sim \text{MN}(\mu_1,\mu_2,\sigma_1^2,\sigma_2^2,p)$. Implemente el algoritmo propuesto en R. Simule 10 000 valores de una $\text{MN}(2,8,1,4,0.2$ y verifique mediante gráficos de histograma con función de densidad y cuantiles que el método propuesto funciona correctamente.
+
+Una manera de simular $X$ consiste en generar primero un valor de $W$ y luego uno de $X|W=w$. El segundo valor tendrá la distribución deseada.
+
+```{r}
+n <- 10000
+u <- c(2,8); sd <- c(1,4)
+p <- 0.2
+
+#Simular observaciones de W
+w <- as.numeric(runif(n)>p)
+#Simular observaciones de X|W
+x <- rnorm(n,u[w+1],sd[w+1])
+```
+
+Procedemos a realizar la evaluación gráfica del ajuste de nuestros datos comparándolos con las curvas teóricas. 
+
+```{r}
+#Comparación mediante histograma
+hist(x,probability = TRUE,ylim=c(0,0.12),breaks=25)
+curve(p*dnorm(l,u[1],sd[1])+(1-p)*dnorm(l,u[2],sd[2]),add = TRUE, xname = "l")
+
+#Comparación mediante gráfica de cuantiles
+
+# 1. Calcular el cuantil de la distribucion teorica al
+#    que pertenece cada valor simulado.
+q_t <- p*pnorm(x,u[1],sd[1])+(1-p)*pnorm(x,u[2],sd[2])
+
+# 2. Usar los cuantiles teoricos para extraer el valor
+#    simulado correspondiente.
+x_q <- quantile(x,q_t)
+
+# 3. Comparar cada valor en su cuantil teórico contra
+#    el valor hallado para ese cuantil en la simulación.
+plot(x,x_q)
+```
 
 d) Presente los pasos que debe seguir el algoritmo de Metropolis-Hastings considerando como distribución generadora de candidatos una distribución normal centrada en el punto anterior. Implemente en R el algoritmo propuesto. Simule 10 000 valores de una $\text{MN}(2, 8, 1, 4, 0.2)$ y verifique mediante gráficos de cadenas, histograma con función de densidad y cuantiles que el método propuesto funciona correctamente.
 
