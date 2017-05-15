@@ -1,0 +1,51 @@
+---
+title: "Lista 2 - Computacional"
+output: html_document
+---
+
+4. El modelo de regresión lineal *t* de Student es dado por
+
+$$y_i \stackrel{ind}\sim t(\mu_i, \sigma^2, \nu)\\
+\mu_i = \beta_0 + \beta_1 x_i$$
+
+donde $\beta_0, \beta_1 \in \mathbb{R}, \sigma^2 > 0$ y $x_i, i = 1, ..., n$ son consideradas constantes conocidas.
+
+a) Estime por máxima verosimilitud el modelo de regresión lineal *t* de Student, considerando que el parámetro de grados de libertad es fijo e igual a 3 $(\nu = 3)$, para las variables `x3` y `y3` del conjunto de datos de `anscombe` de R. Compare sus resultados con el usual modelo de regresión lineal en un gráfico de dispersión. Interprete sus resultados.
+
+---
+
+Para una variable $X \sim t(\mu,\sigma^2,\nu)$, su función de densidad está dada por:
+
+$$f_X(x\mid\mu,\sigma^2,\nu) = \frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{\pi\nu\sigma^2}}\left(1 + \frac{(x-\mu)^2}{\nu\sigma^2}\right)^{-\frac{\nu+1}{2}}$$
+Entonces, la función de verosimilitud para este caso viene dada por:
+
+$$f(\beta_0,\beta_1,\sigma^2\mid x_{1,..,n},y_{1,...,n}) = \prod_{i=1}^{n}\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{\pi\nu\sigma^2}}\left(1 + \frac{(y_i-\beta_0 - \beta_1x_i)^2}{\nu\sigma^2}\right)^{-\frac{\nu+1}{2}}$$
+Para obtener la estimación de máxima verosimilitud de cada parámetro basta minimizar la siguiente función:
+
+$$\ell(\beta_0,\beta_1,\sigma) = \left(\frac{\nu+1}{2}\right)^n\sum_{i=1}^n\left(1+\frac{(y_i-\beta_0-\beta_1x_i)2}{\nu\sigma^2}\right)+n\log(\sigma)$$
+Procedemos a minimizar usando optimización directa:
+
+```{r}
+x<-anscombe$x3;y<-anscombe$y3
+nu<-3;n<-length(x)
+
+llike <- function(params){
+  b0<-params[1]
+  b1<-params[2]
+  sigma<-params[3]
+  (((0.5)*(nu+1))**n)*sum(log(1+((y-b0-b1*x)**2)/nu*sigma**2))+n*log(sigma)
+}
+
+#Obtenemos estimados iniciales con un
+#modelo lineal normal
+mln<-lm(y~x)
+i0<-mln$coefficients[1];i1<-mln$coefficients[2]
+isigma<-sd(mln$residuals)
+
+nlminb(c(0.1,0.1,0.1),llike)
+
+```
+
+---
+
+b) HA
