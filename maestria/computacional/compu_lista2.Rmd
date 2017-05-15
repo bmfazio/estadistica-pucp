@@ -45,7 +45,26 @@ isigma<-sd(mln$residuals)
 nlminb(c(0.1,0.1,0.1),llike)
 
 ```
+```{r}
+x<-anscombe$x3;y<-anscombe$y3
+nu<-3;n<-length(x)
 
+llike <- function(params){
+  b0<-params[1]
+  b1<-params[2]
+  sigma<-params[3]
+  n*log((gamma(nu/2)*sqrt(pi*nu)*sigma))+
+  0.5*(nu+1)*sum(log(1+((y-b0-b1*x)**2)/(nu*sigma**2)))
+}
+
+#Obtenemos estimados iniciales con un
+#modelo lineal normal
+mln<-lm(y~x)
+i0<-mln$coefficients[1];i1<-mln$coefficients[2]
+isigma<-sd(mln$residuals)
+
+nlminb(c(i0,i1,isigma),llike)
+```
 $$f(\beta_0,\beta_1,\sigma^2\mid x_{1,..,n},y_{1,...,n}) = \prod_{i=1}^{n}\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{\pi\nu\sigma^2}}\left(1 + \frac{(y_i-\beta_0 - \beta_1x_i)^2}{\nu\sigma^2}\right)^{-\frac{\nu+1}{2}}$$
 
 $$\ell(\beta_0,\beta_1,\sigma\mid \mathbf{x},\mathbf{y})=n\log\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{\pi\nu\sigma^2}}-\left(\frac{\nu+1}{2}\right)\sum_{i=1}^n\log\left(1+\frac{(y_i-\beta_0-\beta_1x_i)^2}{\nu\sigma^2}\right)$$
