@@ -1,0 +1,42 @@
+---
+title: "Modelos lineales - Lista 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r, message=FALSE}
+setwd("D:/Clases/puk/modlin/lista1")
+library(magrittr);library(data.table)
+library(lmtest)
+
+consu<-fread("consu.txt")
+
+#par(mfrow=c(2,2))
+#plot(log(consu$ingreso),log(consu$consumo))
+#plot(log(consu$ingreso),log(consu$riqueza))
+#plot(log(consu$ingreso),consu$interes)
+
+ml<-lm(formula = log(consumo) ~ log(ingreso) + log(riqueza) + interes, data = consu)
+
+par(mfrow=c(2,2))
+plot(ml)
+
+#Diagnosticos de correlacion
+  #Durbin-Watson
+dwtest(ml)
+  #Grafica de residual vs residual previo
+rn1 <- c(NA,ml$residuals[-length(ml$residuals)])
+  #Regresion de residual vs residual previo
+lm(formula = ml$residuals ~ rn1)
+  #Agregando residual previo a modelo
+mlr<-lm(formula = log(consumo) ~ log(ingreso) + log(riqueza) + interes + rn1, data = consu)
+```
