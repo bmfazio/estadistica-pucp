@@ -1,0 +1,83 @@
+---
+title: "Plaje legal - Computacional"
+output: html_document
+---
+
+##Generación de variables aleatorias
+
+Para todos los métodos se necesita una forma de generar una $U \sim \text{Uniforme}(0,1)$.
+
+###1. Transformada inversa
+
+Insumos:
+
+* Variable aleatoria de distribución conocida: $X \sim f(x)$
+
+* Debemos poder calcular $F(x)$ y $F^{-1}(u)$
+
+Pasos:
+
+1. Generar una observación $u$ de $U$.
+
+2. Obtener observación de la distribución deseada con $x = F^{-1}(u)$ (caso continuo) o $x=\text{min}\{r \in R_X \mid F(r) \geq u\}$.
+
+(repetir)
+
+###2. Método de aceptación y rechazo
+
+Insumos:
+
+* Variable aleatoria de distribución conocida: $X \sim f(x)$
+
+* Otra distribución de la cual pueden generarse observaciones con facilidad, $g(x)$.
+
+* Debe cumplirse que $\frac{f(x)}{g(x)} \leq c$
+
+Pasos:
+
+1. Generar una observación $y$ usando $g(y)$.
+
+2. Generar una observación $u$ de $U$.
+
+3. Si $u \leq \frac{f(x)}{cg(x)} \Rightarrow x = y$, si no regresar a 1.
+
+(repetir)
+
+###3. Método de aceptación y rechazo adaptativo
+
+Insumos:
+
+* Variable aleatoria de distribución conocida: $X \sim f(x)$
+
+* Debe cumplirse $\frac{d^2}{dx^2}\log f(x) < 0 \forall x \in R_X$
+
+Pasos:
+
+Usar el paquete de R xd
+
+###4. Método de Metropolis-Hastings
+
+Insumos:
+
+* Variable aleatoria de distribución conocida: $X \sim f(x)$
+
+* Otra distribución de la cual pueden generarse observaciones con facilidad, $q_Y(.\mid X)$.
+
+Pasos:
+
+1. Inicializar valor $x_t$, $t=0$
+
+2. Generar observación $y$ de $q(.|x_t)$
+
+3. Generar un $u$.
+
+4. Si $u \leq \alpha(x,y) = \min\left(1,\frac{f(y)q(x\mid y)}{f(x)q(y\mid x)}\right) \Rightarrow x_{t+1} = y$, de lo contrario $x_{t+1} = x_t$
+
+5. Ir a 2 con $t\leftarrow t+1$
+
+###Transformación para variables truncadas
+
+##Métodos de Monte Carlos para estadística inferencial
+
+##Estimación de máxima verosimilitud
+
