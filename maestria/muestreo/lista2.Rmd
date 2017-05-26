@@ -1,0 +1,97 @@
+---
+title: "Lista 2 - Muestreo"
+output: html_document
+---
+
+```{r,echo=FALSE}
+wd<-"D:/Clases/puk/muest"
+```
+
+11. Considere la base de datos poblacional Province 91 del capítulo 2 y la variable Stratum que identifica si la municipalidad de la provincia en estudio es urbana o rural. Usando esta última como variable de estratificación y la variable número de personas desempleadas como variable de investigación tome un MAE de 8 municipalidades y responda a lo siguiente:
+
+a. Halle los tamaños de muestra por estrato, usando tanto la asignación proporcional como la de Neyman.
+
+---
+
+Cargamos los datos.
+
+```{r,message=FALSE}
+setwd(wd)
+library(data.table)
+
+p91<-fread("province91.csv")
+
+#Tamaños de poblacion
+N<-nrow(p91)
+Nh<-p91[,.N,stratum]$N
+
+#Tamaño de muestra (dato de problema)
+n<-8
+```
+
+Los tamaños de muestra para cada estrato $h$ pueden expresarse como fracciones de la muestra total:
+
+$$n_h = a_hn$$
+Para la asignación proporcional, se toma $a_h = \frac{N_h}{N}$. Calculamos los $n_h$ resultantes:
+
+```{r}
+nh_proporcional<-round(n*Nh/N)
+```
+```{r,echo=FALSE}
+cat("n estrato 1: ",nh_proporcional[1])
+cat("n estrato 2: ",nh_proporcional[2])
+```
+
+En el caso de la asignación de Neyman, tenemos $a_h = \frac{N_hS_h}{\sum_{j=1}^HN_jS_j}$. Asumimos que algún estudio previo nos ha provisto de valores certeros para los $S_h$ requeridos en el cálculo y procedemos a obtener los $n_h$ correspondientes:
+
+```{r}
+Sh<-p91[,sd(ue91)**2,stratum]$V1
+nh_neyman<-round(n*Nh*Sh/sum(Nh*Sh))
+
+```
+```{r,echo=FALSE}
+cat("n estrato 1: ",nh_neyman[1])
+cat("n estrato 2: ",nh_neyman[2])
+nh_neyman<-c(6,2)
+```
+
+No es práctico tomar el resultado de la fórmula directamente, ya que con $n_2=1$ no sería posible obtener un estimado de la varianza en ese estrato o para la población total. Entonces para la asignación de Neyman, trabajaremos con $n_1=6,n_2=2$.
+
+---
+
+b. Halle para los dos esquemas anteriores los efectos de diseño de la estimación del total de personas desempleadas en la provincia.
+
+---
+
+El efecto de diseño está dado por:
+
+$$D_{eff}=\frac{V_{MAE}(\bar{Y})}{V_{MASs}(\bar{Y})}$$
+Procedemos a realizar el cálculo:
+
+```{r}
+S<-sd(p91$ue91)**2
+
+VMASs<-(1-n/N)*(S)/n
+VMAE_proporcional<-sum(((Nh/N)**2)*(1-nh_proporcional/Nh)*(Sh/nh_proporcional))
+VMAE_neyman<-sum(((Nh/N)**2)*(1-nh_neyman/Nh)*(Sh/nh_neyman))
+
+Deff_proporcional<-VMAE_proporcional/VMASs
+Deff_neyman<-VMAE_neyman/VMASs
+```
+```{r,echo=FALSE}
+cat("Deff proporcional: ",Deff_proporcional)
+cat("Deff Neyman: ",Deff_neyman)
+```
+
+---
+
+c. Tome las muestras requeridas bajo los dos esquemas anteriores y estime tanto el total de personas desempleadas en la provincia como los efectos de diseño de estas estimaciones. Para esto último puede utilizar, como es usual en muchos softwares estadísticos, la metodología planteada en el ejercicio 2.
+
+---
+
+```{r}
+p91s<-p91[sample()]
+
+library(survey)
+svydesign(ids=~0,strata=~stratum,fpc=rep(Nh,Nh),data=p91)
+```
