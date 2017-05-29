@@ -11,7 +11,7 @@ wd<-"D:/Clases/puk/compu/ex1/"
 
 ## Pregunta 4
 
-Una variable aleatoria $X$, definida en toda la recta, tiene distribución normal asimétrica estándar (Azzalini, 1985) con parámetro de asimetrías $\lambda$, esto es $X \sim \text{SN}(\lambda)$, si su función de densidad es dada por la siguiente expresión:
+Una variable aleatoria $X$, definida en toda la recta, tiene distribución normal asimétrica estándar (Azzalini, 1985) con parámetro de asimetría $\lambda$, esto es $X \sim \text{SN}(\lambda)$, si su función de densidad es dada por la siguiente expresión:
 
 $$f(x) = 2\phi(x)\Phi(\lambda x)$$
 
@@ -47,7 +47,7 @@ b. Indique en qué casos el estimador existe.
 
 ---
 
-Observamos que para valores de $|\bar x| > \sqrt{2/\pi}$, el denominador de la expresión anterior toma valores negativos, entonces la raíz cuadrada no está definida en $\mathbb{R}$.
+Observamos que para valores de $|\bar x| \geq \sqrt{2/\pi}$, el denominador de la expresión anterior toma valores en $(-\infty,0]$ para los cuales la raíz cuadrada no está definida.
 
 Por lo tanto, el estimador de momentos para $\lambda$ solo está definido para
 
