@@ -1,0 +1,274 @@
+---
+title: "Estadística Computacional - Examen 1, Parte 2"
+author: Boris Manuel Fazio Luna
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+wd<-"D:/Clases/puk/compu/ex1/"
+```
+
+## Pregunta 4
+
+Una variable aleatoria $X$, definida en toda la recta, tiene distribución normal asimétrica estándar (Azzalini, 1985) con parámetro de asimetrías $\lambda$, esto es $X \sim \text{SN}(\lambda)$, si su función de densidad es dada por la siguiente expresión:
+
+$$f(x) = 2\phi(x)\Phi(\lambda x)$$
+
+**Propiedad:** sean $Z_1 \sim \text{N}(0,1)$ y $Z_2 \sim \text{N}(0,1)$ independientes, entonces
+
+$$X = \frac{1}{\sqrt{1+\lambda^2}}Z_1+\frac{\lambda}{\sqrt{1+\lambda^2}}|Z_2| \sim \text{SN}(\lambda)$$
+a. Encuentre el estimador de momentos para $\lambda$ en este modelo.
+
+---
+
+Escribimos los momentos poblacionales hasta obtener suficientes ecuaciones para despejar el parámetro de interés:
+
+\begin{align}
+m_1 &= \text{E}(X)\\
+&= \text{E}\left(\frac{1}{\sqrt{1+\lambda^2}}Z_1+\frac{\lambda}{\sqrt{1+\lambda^2}}|Z_2|\right)\\
+&=\frac{1}{\sqrt{1+\lambda^2}}\left[\underbrace{\text{E}\left(Z_1\right)}_{0}+\underbrace{\lambda\text{E}\left(|Z_2|\right)}_{\sqrt{2/\pi}}\right]\\
+&=\frac{\lambda\sqrt{2/\pi}}{\sqrt{1+\lambda^2}}
+\end{align}
+
+El estimador de momentos se obtiene igualando el momento poblacional y el muestral:
+
+\begin{align}
+m_1 &= M_1\\
+\frac{\lambda\sqrt{2/\pi}}{\sqrt{1+\lambda^2}}&=\frac{1}{n}\sum_{i=1}^nx_i\\
+\frac{1+\lambda^2}{\lambda^2} &= \frac{2/\pi}{\bar{x}^2}\\
+\frac{1}{\lambda^2} &= \frac{2}{\pi\bar{x}^2} - 1\\
+\lambda &= \sqrt{\frac{\pi\bar{x}^2}{2 - \pi\bar{x}^2}}
+\end{align}
+
+---
+
+b. Indique en qué casos el estimador existe.
+
+---
+
+Observamos que para valores de $|\bar x| > \sqrt{2/\pi}$, el denominador de la expresión anterior toma valores negativos, entonces la raíz cuadrada no está definida en $\mathbb{R}$.
+
+Por lo tanto, el estimador de momentos para $\lambda$ solo está definido para
+
+$$\bar{x} \in \left(-\sqrt{2/\pi},\sqrt{2/\pi}\right)$$
+
+---
+
+c. Realice un estudio de simulación para diferentes valores de $\lambda = 0,5,10$  tamaño de muestra $n = 20,50,100$ para calcular la probabilidad de que el estimador de momentos exista, además estudie el comportamiento del estimador utilizando el sesgo y el error cuadrático medio.
+
+---
+
+Puesto que ya contamos con funciones para simular observaciones de una normal, usamos la propiedad dada al inicio del problema para simular $X$ a partir de $Z_1$ y $Z_2$.
+
+```{r,warning=FALSE}
+#Definimos función de simulación
+sim <- function(la,n,iter=2.5*10**5){
+  
+  #Para almacenar estimaciones:
+  estim<-numeric(iter)
+  
+  for(i in 1:iter){
+    #Simular Z1 y Z2
+    z1<-rnorm(n);z2<-rnorm(n)
+    
+    #Calcular X
+    x<-(z1+la*abs(z2))/sqrt(1+la**2)
+    xm<-mean(x)
+    
+    #Estimar lambda y almacenar
+    estim[i] <- sqrt((pi*xm**2)/(2-pi*xm**2))
+  }
+  
+  estim
+}
+
+lambdas <- 5*0:2
+muestra <- c(20,50,100)
+escenario <-expand.grid(lambda=lambdas,tam=muestra)
+
+set.seed(2017)
+todo <- apply(escenario,1,function(x){sim(x[1],x[2])})
+
+result <- cbind(escenario,
+                pLaEx=1-colSums(is.na(todo))/nrow(todo),
+                sesgo=colMeans(todo,na.rm=TRUE)-escenario$lambda,
+                ecm=colMeans((todo-escenario$lambda)**2,na.rm=TRUE))
+
+round(result,3)
+```
+
+Observamos que la probabilidad de que el estimador exista disminuye a medida que $\lambda$ toma valores más grandes, pero incrementa con el tamaño de muestra.
+
+Vemos también que con mayores valores de $\lambda$, el desempeño del estimador empeora pues tanto el sesgo como el error cuadrático medio crecen.
+
+Por otro lado, incrementar el tamaño de muestra reduce el sesgo del estimador, pero incrementa el error cuadrático medio de manera considerable para valores grandes de $\lambda$.
+
+---
+
+## Pregunta 5
+
+Se desea estudiar la relación entre temperatura y la concentración de $\text{CO}_2$, para esto se han recolectado las siguientes variables:
+
+* $y_i =$ temperatura medida como su diferencia con la temperatura actual en el periodo $i$-ésimo
+
+* $x_i =$ la concentración de $\text{CO}_2$ medida en partes por millón en el periodo $i$-ésimo
+
+Se puede considerar un modelo de regresión simple dado por
+
+$$Y \sim \text{N}(X\beta,\sigma^2I)$$
+donde $Y = (y_1,...,y_n)^T$, $X=(1,x)$ es una matriz de dimensión $n\times2$, $1$ es un vector de unos de dimensión $n$, $x(x_1,...,x_n)^T$, $\beta = (\beta_1, \beta_2)^T$, $\sigma^2 > 0$ y $I$ es la matriz de identidad.
+
+Por otro lado, es conocido que en casos de medidas repetidas en el tiempo se puede tener una autocorrelación entre las observaciones. Por lo que un modelo alternativo sería un modelo de regresión que considere una estructura autoregresiva de primer orden entre las observaciones dado por
+
+$$Y \sim \text{N}(X\beta,\sigma^2C_p)$$
+
+donde
+
+$$C_p =
+\begin{pmatrix}
+1&\rho&\rho^2&...&\rho^{n-1}\\
+\rho&1&\rho&...&\rho^{n-2}\\
+\rho^2&\rho&1&...&\rho^{n-3}\\
+\vdots&\vdots&\vdots&\ddots&\vdots\\
+\rho^{n-1}&\rho^{n-2}&\rho^{n-3}&...&1
+\end{pmatrix}$$
+
+y $0<\rho<1$.
+
+a. Estime por máxima verosimilitud los modelos de regresión simple y el modelo estructura autoregresiva de primer orden.
+
+---
+
+Si $\mathbf{Y} \sim \text{N}(\mathbf{u},\Sigma)$, su función de densidad viene dada por
+
+$$f(\mathbf{y}\mid\mathbf{u},\Sigma) = (2\pi)^{-n/2}\det(\Sigma)^{-1/2}\exp\left[-\frac{1}{2}(\mathbf{y}-\mathbf{u})'\Sigma^{-1}(\mathbf{y}-\mathbf{u})\right]$$
+Entonces su log-verosimilitud es
+
+$$\ell(\mathbf{y}\mid\mathbf{u},\Sigma) = -\frac{n}{2}\log2\pi-\frac{1}{2}\log\det(\Sigma)-\frac{1}{2}\log\left[(\mathbf{y}-\mathbf{u})'\Sigma^{-1}(\mathbf{y}-\mathbf{u})\right]$$
+En este caso, $\mathbf{u}=X\beta$ y $\Sigma$ dependerá del modelo planteado.
+
+Para obtener los EMV, usamos optimización directa implementada en R:
+
+```{r,message=FALSE}
+library(data.table)
+xy<-fread(paste0(wd,"ex1.csv"))
+
+#LV para regresion simple
+llikeS <- function(params,dataf=xy){
+  x <- dataf$x
+  y <- dataf$y
+  n <- nrow(dataf)
+  
+  b1 <- params[1]
+  b2 <- params[2]
+  s  <- params[3]
+  
+  u <- b1+b2*x
+  Sigma <- (s**2)*diag(n)
+  
+  #Negativo de parte no constante de LV
+  log(det(Sigma)) + (t(y-u)%*%solve(Sigma)%*%(y-u))
+}
+
+#LV para regresion con autocorrelacion
+llikeA <- function(params,dataf=xy){
+  x <- dataf$x
+  y <- dataf$y
+  n <- nrow(dataf)
+  
+  b1 <- params[1]
+  b2 <- params[2]
+  s  <- params[3]
+  rho<- params[4]
+  
+  u <- b1+b2*x
+  
+  Sigma <- rho**abs(t(matrix(rep(1:n,n),ncol=n))-1:n)
+  diag(Sigma) <- 1
+  Sigma <- (s**2)*Sigma
+  
+  #Negativo de parte no constante de LV
+  log(det(Sigma)) + (t(y-u)%*%solve(Sigma)%*%(y-u))
+}
+
+#Estimados iniciales con modelo lineal normal
+mln<-lm(y~x,data = xy)
+i1<-mln$coefficients[1];i2<-mln$coefficients[2]
+iS<-sd(mln$residuals)
+iR<-cor(xy$x,xy$y)
+
+mlS<-nlminb(c(i1,i2,iS),llikeS)
+mlA<-nlminb(c(i1,i2,iS,iR),llikeA)
+```
+
+Para el modelo de regresión simple obtenemos:
+
+```{r,echo=FALSE}
+cat("Beta 1: ",mlS$par[1])
+cat("Beta 2: ",mlS$par[2])
+cat("Sigma: ",mlS$par[3])
+```
+
+Para el modelo de regresión con estructura autoregresiva obtenemos:
+
+```{r,echo=FALSE}
+cat("Beta 1: ",mlA$par[1])
+cat("Beta 2: ",mlA$par[2])
+cat("sigma: ",mlA$par[3])
+cat("rho: ",mlA$par[4])
+```
+
+---
+
+b. Compare ambos modelos e indique cuál sería más apropiado en este caso. Interprete sus resultados.
+
+---
+
+Usamos criterios de información para comparar los modelos:
+
+```{r}
+#Funcion de desvío
+Dv <- function(params,auto,dataf=xy){
+  x <- dataf$x
+  y <- dataf$y
+  n <- nrow(dataf)
+  
+  b1 <- params[1]
+  b2 <- params[2]
+  s  <- params[3]
+  
+  u <- b1+b2*x
+  
+  if(!auto){
+      Sigma <- (s**2)*diag(n)
+  }else{
+      rho<- params[4]
+      Sigma <- rho**abs(t(matrix(rep(1:n,n),ncol=n))-1:n)
+      diag(Sigma) <- 1
+      Sigma <- (s**2)*Sigma 
+  }
+
+ n*log(2*pi) + log(det(Sigma)) + (t(y-u)%*%solve(Sigma)%*%(y-u))
+}
+
+#Funciones para calcular criterios de informacion
+aic <- function(theta,...){
+  as.vector(Dv(theta,..1)+2*length(theta))
+}
+
+bic <- function(theta,...){
+  as.vector(Dv(theta,..1)+log(nrow(xy))*length(theta))
+}
+```
+
+Evaluamos ambos criterios:
+
+```{r}
+aic(mlS$par,FALSE) > aic(mlA$par,TRUE)
+bic(mlS$par,FALSE) > bic(mlA$par,TRUE)
+```
+
+El modelo de regresión simple es un caso particular del modelo autoregresivo con $\rho = 0$ y, dado que $\rho$ representa la correlación entre observaciones en diferentes momentos, obtener un $\rho \neq 0$ al maximizar la verosimilitud así como tener valores menores de AIC y BIC, indican que este último modelo da un mejor ajuste a los datos observados.
+
+En términos del problema concreto, esto significa que la temperatura en cualquier momento dado depende fuertemente de la temperatura en momentos anteriores, más allá de las variación atribuible a los cambios en niveles de $\text{CO}_2$. Además, el cambio en la magnitud de $\beta_2$ sugiere que un modelo que no tome en cuenta la correlación entre las medidas estaría sobreestimando el impacto de los niveles de $\text{CO}_2$ sobre la temperatura.
