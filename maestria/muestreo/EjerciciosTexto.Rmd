@@ -1,0 +1,31 @@
+---
+title: "Ejercicios de Muestreo"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Capitulo 2 - MAS
+
+### Ejercicio 11
+
+Suponga que en una zona rural de 3000 viviendas se ha planificado una encuesta por muestreo tomandose un MASs de 100 viviendas. Un interes de la encuesta es estimar el consumo total mensual de agua para los hogares que cuentan con servicio de agua y desague.
+
+a) Tomada la muestra, proponga una estimacion de este total. Asuma, como es natural, que antes de tomarse la muestra no es posible identificar de antemano si un hogar de la zona posee o no servicio de agua y desague, pero que si conocemos cuantas vivivendas en la zona tienen este servicio.
+
+b) De manera general, dada una poblacion de tamano $N$ y una MASs en ella de tamano $n$ muestre que para una variable estadistica $y$ y cierto subconjunto de esta poblacion (dominio $d$) cuyas membresias se desconocen, $\hat\tau_d = \frac{N}{n}\sum_{i=1}^nY_i\delta_{di}$, donde $Y_i$ es el valor de $y$ en la $i$-esima vivienda seleccionada y $\delta_{di}$ es una variable indicadora que vale $1$ si, y solamente si, la i-esima vivienda seleccionada pertenece al dominio $d$, es un estimador insesgado del total $\tau_d$ de $y$ para este dominio.
+
+c) Muestre que la varianza de $y$ en toda la poblacion, $\sigma^2$, y la de $y$ en el dominio, $\sigma_d^2$, satisfacen aproximadamente la relación
+
+$$\sigma^2 = p_d(\sigma_d^2+q_d\mu_d^2)$$
+siendo $\mu_d$ la media de $y$ en el dominio $d$, $p_d = \frac{N_d}{N}$ la proporción de elementos del dominio $d$ en la población y $q_d = 1 - pd_d$
+
+d) Usando c), muestre que si desea estimar $\tau_d$ con un máximo error de estimación $e$ y una confianza del $100(1-\alpha)\%$, el tamaño de muestra apropiado viene dado por
+
+$$n = \frac{(\sigma_d^2+q_d\mu_d^2)Nz_{1-\alpha/2}^2}{Ne^2p_d+(\sigma_d+\mu_dq_d)\mu_dz_{1-\alpha/2}^2}$$
+e) Obtenga, haciendo las estimaciones necesarias, el tamaño de muestra que se necesitaría en una encuesta futura para a), si es que se desea estimar $\tau_d$ con un margen de error no mayor a los $200$ litros con una confianza del $95\%$. Para ello suponga que para la encuesta tomada en a) se encontró que $60$ hogares contaban con servicios de agua y desagüe y en promedio ellos consumieron en el mes $5100$ litros con una desviación estándar de 380 litros.
+
+---
