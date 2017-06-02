@@ -56,7 +56,9 @@ Primero recordamos las fórmulas relevantes para este problema:
 
 Nombre|Parámetro|Estimador
 ------|---------|---------
-Total|$\tau = \sum_{h=1}^HN_h\mu_h$|$\hat\tau = \sum_{h=1}^HN_h\bar y_h$
+Media, estrato h|$\mu_h = \frac{1}{N_h}\sum_{i=1}^{N_h}y_{hi}$|$\bar Y_h = \frac{1}{N_h}\sum_{i=1}^{N_h}\frac{N_h}{n_h}y_{hi}\delta_{hi}=\frac{1}{n_h}\sum_{i=1}^{n_h}Y_{hi}$
+Media global|$\mu = \frac{1}{N}\sum_{i=1}^Ny_i$|$\bar Y= \frac{1}{N}\sum_{h=1}^HN_h\bar Y_h$
+Total|$\tau = \sum_{h=1}^HN_h\mu_h$|$\hat\tau = \sum_{h=1}^HN_h\bar Y_h$
 
 ```{r}
 #Cargar datos
@@ -87,4 +89,3 @@ means2 = svymean(~api00,disenhoMAE)
 
 means1
 means2
-```
