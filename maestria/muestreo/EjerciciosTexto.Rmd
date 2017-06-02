@@ -5,7 +5,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+library(data.table)
+library(magrittr)
+library(survey)
 ```
 
 ## Capitulo 2 - MAS
@@ -29,3 +31,60 @@ $$n = \frac{(\sigma_d^2+q_d\mu_d^2)Nz_{1-\alpha/2}^2}{Ne^2p_d+(\sigma_d+\mu_dq_d
 e) Obtenga, haciendo las estimaciones necesarias, el tamaño de muestra que se necesitaría en una encuesta futura para a), si es que se desea estimar $\tau_d$ con un margen de error no mayor a los $200$ litros con una confianza del $95\%$. Para ello suponga que para la encuesta tomada en a) se encontró que $60$ hogares contaban con servicios de agua y desagüe y en promedio ellos consumieron en el mes $5100$ litros con una desviación estándar de 380 litros.
 
 ---
+
+## Capítulo 3 - MAE
+
+### Ejemplo 3.6.1: MAE en la población API
+
+Datos del problema:
+
+* **Método:** MAE
+
+    * **Estratos:** E (escuela elemental), M (escuela media), H (escuela superior)
+    
+    * $n_E = 100$, $n_M = 50$, $n_H = 50$
+    
+* **Estimaciones deseadas**
+
+    * Total de matriculados
+    
+    * Media del Academic Performance Index (API) para 1999 y 2000
+
+**Resolución:**
+
+Primero recordamos las fórmulas relevantes para este problema:
+
+Nombre|Parámetro|Estimador
+------|---------|---------
+Total|$\tau = \sum_{h=1}^HN_h\mu_h$|$\hat\tau = \sum_{h=1}^HN_h\bar y_h$
+
+```{r}
+#Cargar datos
+data(api)
+
+#Examinamos estratos
+strat<-apipop$stype
+Nh<-table(strat)
+Nh
+```
+
+
+
+set.seed(100)
+index = c(sample(which(strat=="E"),100),sample(which(strat=="H"),50),
+sample(which(strat=="M"),50))
+sample1 = apipop[index,]
+
+aux = data.frame(pw = c(rep(44.21,100), rep(15.1,50), rep(20.36,50))
+, fpc = c(rep(4421,100),rep(755,50), rep(1018,50)))
+sampleMAE = cbind(num = 1:200,sample1,aux)
+disenhoMAE = svydesign(id=~1,strata=~stype,fpc = ~fpc, data = sampleMAE)
+
+svytotal(~enroll,disenhoMAE)
+
+means1 = svymean(~api99,disenhoMAE,deff=TRUE)
+means2 = svymean(~api00,disenhoMAE)
+
+means1
+means2
+```
