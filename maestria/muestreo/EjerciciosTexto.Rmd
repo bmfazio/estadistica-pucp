@@ -56,22 +56,27 @@ Primero recordamos las fórmulas relevantes para este problema:
 
 Nombre|Parámetro|Estimador
 ------|---------|---------
-Media, estrato h|$\mu_h = \frac{1}{N_h}\sum_{i=1}^{N_h}y_{hi}$|$\bar Y_h = \frac{1}{N_h}\sum_{i=1}^{N_h}\frac{N_h}{n_h}y_{hi}\delta_{hi}=\frac{1}{n_h}\sum_{i=1}^{n_h}Y_{hi}$
+Media, estrato h|$\mu_h = \frac{1}{N_h}\sum_{i=1}^{N_h}y_{hi}$|$\bar Y_h=\frac{1}{n_h}\sum_{i=1}^{n_h}Y_{hi}$
 Media global|$\mu = \frac{1}{N}\sum_{i=1}^Ny_i$|$\bar Y= \frac{1}{N}\sum_{h=1}^HN_h\bar Y_h$
 Total|$\tau = \sum_{h=1}^HN_h\mu_h$|$\hat\tau = \sum_{h=1}^HN_h\bar Y_h$
+
+Además, para estimar la precisión de las estimaciones,
+
+$$\text{Var}(\bar Y) = \sum_{h=1}^H \left(\frac{N_h}{N}\right)^2\left(1-\frac{n_h}{N_h}\right)$$
+
+Procedemos con los cálculos respectivos:
 
 ```{r}
 #Cargar datos
 data(api)
+apipop %<>% data.table
 
-#Examinamos estratos
+#Extraer informacion de estratos
 strat<-apipop$stype
 Nh<-table(strat)
 Nh
-```
 
-
-
+#Generamos la muestra
 set.seed(100)
 index = c(sample(which(strat=="E"),100),sample(which(strat=="H"),50),
 sample(which(strat=="M"),50))
@@ -82,10 +87,23 @@ aux = data.frame(pw = c(rep(44.21,100), rep(15.1,50), rep(20.36,50))
 sampleMAE = cbind(num = 1:200,sample1,aux)
 disenhoMAE = svydesign(id=~1,strata=~stype,fpc = ~fpc, data = sampleMAE)
 
+#Calculamos las estimaciones "a mano"
+mean99_h <- sampleMAE[,.(api99=mean(api99),fpc=unique(fpc)),.(stype)]
+mean99 <- sum(mean99_h$api99*Nh)/sum(Nh)
+mean99_sd <- 
+
+mean00_h <- sampleMAE[,.(api00=mean(api00),fpc=unique(fpc)),.(stype)]
+mean00 <- sum(mean00_h$api00*Nh)/sum(Nh)
+
+meanen_h <- sampleMAE[,.(enroll=mean(enroll),fpc=unique(fpc)),.(stype)]
+total <- sum(meanen_h$enroll*Nh)
+
+
 svytotal(~enroll,disenhoMAE)
 
-means1 = svymean(~api99,disenhoMAE,deff=TRUE)
-means2 = svymean(~api00,disenhoMAE)
+means1 <- svymean(~api99,disenhoMAE,deff=TRUE)
+means2 <- svymean(~api00,disenhoMAE)
 
 means1
 means2
+```
