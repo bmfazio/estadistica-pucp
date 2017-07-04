@@ -1,0 +1,30 @@
+---
+title: "Lista 3 - Tecnicas de Muestreo"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+wd <- "D:/bfazio/maestria/monstreo/lista3"
+```
+
+4. Suponga que la municipalidad de San Miguel lo ha contratado a usted para hacer un estudio. Ellos desean tener basicamente una idea del numero promedio de alumnos por seccion de sus colegios, la proporcion de colegios en el distrito que ofrecen todos los niveles de educacion escolar y la proporcion de colegios mixtos del distrito. Si bien esta informacion se encuentra en la pagina Web del ministerio de educacion, usted estimara estos parametros mediante un muestreo complejo. Este consistira en seleccionar los colegios mediante un muestreo ppt (proporcional al numero de estudiantes en el colegio), en cada uno de los dos estratos definidos en la poblacion: los colegios de gestion publica y los colegios de gestion privada.
+
+a) Tome una muestra piloto de 30 colegios con las caracteristicas anteriores (puede ser de 15 en cada estrato) y en base a ella estime el efecto de diseño para una proporcion.
+
+---
+
+```{r}
+library(data.table)
+setwd(wd)
+
+P <- fread("iiee.csv")
+
+# CUIDADO CON LOS MISSING!
+```
+
+---
+
+b) Halle un tamaño de muestra para este estudio de tal manera que se pueda estimar cualquiera de las proporciones pedidas con un margen de error no mayor a 0.1 a un nivel de confianza del 95%.
+
+c) Tome la muestra final, reportando tanto las estimaciones pedidas como sus errores de estimacion estimados.
