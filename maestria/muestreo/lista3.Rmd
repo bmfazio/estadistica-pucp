@@ -15,11 +15,22 @@ a) Tome una muestra piloto de 30 colegios con las caracteristicas anteriores (pu
 ---
 
 ```{r}
-library(data.table)
+library(data.table);library(sampling)
 setwd(wd)
+set.seed(2017)
 
-P <- fread("iiee.csv")
+# Preparar datos
+P <- fread("iiee.csv")[!is.na(alumnos)&alumnos>0]
+P[,gestion:=rapply(strsplit(P$gestion," -"),function(x) head(x,1))]
 
+# Seleccion de muestra piloto
+estratos <- unique(P$gestion)
+n <- c(15,15);names(n) <- estratos
+incprob <- lapply(estratos,function(x) inclusionprobabilities(P[gestion==x]$alumnos,n[x]))
+muestrap <- lapply(incprob,function(x) as.logical(UPsampford(x)))
+
+P[gestion==estratos[1]][muestrap[[1]]]
+P[gestion==estratos[2]][muestrap[[2]]]
 # CUIDADO CON LOS MISSING!
 ```
 
