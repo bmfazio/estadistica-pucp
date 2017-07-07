@@ -35,6 +35,14 @@ P <- iiee[,.(niveles=.N-1,alumnos=sum(alumnos),
              alusec=sum(alumnos)/sum(secciones),
              mixto=ifelse(unique(genero)=="Mixto",1,0)),.(codloc,gestion)]
 
+  # niveles  0 = solo primaria o secundaria
+  #          1 = primaria y secundaria
+  #
+  # mixto    0 = no es mixto
+  #          1 = es mixto
+  #
+  # alusec   numero de alumnos por seccion
+
 # Seleccion de muestra piloto, n = 30
     # Solo hay 10 colegios de gestion publica asi
     # que podemos tomar un censo para ese estrato
@@ -57,10 +65,20 @@ muestra_v <- svymean(~niveles+mixto, design=estrato_svy, deff=TRUE)
 mass_v <- svymean(~niveles+mixto, design=mass_svy, deff=TRUE)
 ```
 
-Recordamos que la varianza de la media poblacional en un MAE viene dada por:
+La varianza de la media poblacional en un MAE viene dada por:
 
 $$\text{V}(\bar Y) = \sum_{h=1}^H \left(\frac{N_h}{N}\right)^2\text{V}(\bar Y_h)$$
+La varianza de nuestra estimación para colegios públicos es cero ya que contamos con un censo de dicho estrato. Con esta informacion, procedemos a calcular la varianza del estimador poblacional para obtener el efecto de diseño para las proporciones de interés.
 
+```{r}
+Vmc <- ((N[estratos[1]]/sum(N))**2)*diag(attr(muestra_v,"var"))
+Vmass <- diag(attr(mass_v,"var"))
+# Deff:
+Vmc/Vmass
+```
+```{r, echo=FALSE}
+Deff <- Vmc/Vmass
+```
 
 ---
 
@@ -68,8 +86,23 @@ b) Halle un tamaño de muestra para este estudio de tal manera que se pueda esti
 
 ---
 
+Debido a que la muestra piloto ya nos dio toda la información necesaria del estrato público, solo es necesario preocuparnos por la estimación en el estrato privado. Usamos el mayor $D_\text{eff}$ de la estimacion en ese estrato para obtener el tamaño de muestra requerido:
 
+```{r}
+e2 <- 0.1**2
+z2deffS2 <- (qnorm(0.975)**2)*Deff[1]*Vmass[1]
+n_final <- ceiling(as.vector(z2deffS2*N[1]/(N[1]*e2+z2deffS2)))
+```
+
+Obtenemos $n = 32$ para la muestra final.
 
 ---
 
 c) Tome la muestra final, reportando tanto las estimaciones pedidas como sus errores de estimacion estimados.
+
+---
+
+```{r}
+incprobf <- inclusionprobabilities(P[gestion==estratos[1]]$alumnos,n_final)
+seleccionf <- as.logical(UPsampford(incprobf))
+```
