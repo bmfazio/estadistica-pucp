@@ -5,37 +5,71 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-wd <- "D:/bfazio/maestria/monstreo/lista3"
+wd <- "D:/Clases/estadisticaPUCP/muest/lista3"
 ```
 
 4. Suponga que la municipalidad de San Miguel lo ha contratado a usted para hacer un estudio. Ellos desean tener basicamente una idea del numero promedio de alumnos por seccion de sus colegios, la proporcion de colegios en el distrito que ofrecen todos los niveles de educacion escolar y la proporcion de colegios mixtos del distrito. Si bien esta informacion se encuentra en la pagina Web del ministerio de educacion, usted estimara estos parametros mediante un muestreo complejo. Este consistira en seleccionar los colegios mediante un muestreo ppt (proporcional al numero de estudiantes en el colegio), en cada uno de los dos estratos definidos en la poblacion: los colegios de gestion publica y los colegios de gestion privada.
+
+---
 
 a) Tome una muestra piloto de 30 colegios con las caracteristicas anteriores (puede ser de 15 en cada estrato) y en base a ella estime el efecto de diseño para una proporcion.
 
 ---
 
-```{r}
-library(data.table);library(sampling)
+Dada la informacion que solicita el enunciado, trabajaremos con aquellas IIEE de San Miguel de modalidad escolarizada y solo de niveles primaria o secundaria. Procedemos con el muestreo:
+
+```{r, warning=FALSE, message=FALSE}
+library(data.table)
+library(sampling)
+library(survey)
 setwd(wd)
-set.seed(2017)
 
 # Preparar datos
-P <- fread("iiee.csv")[!is.na(alumnos)&alumnos>0]
-P[,gestion:=rapply(strsplit(P$gestion," -"),function(x) head(x,1))]
+iiee <- fread("iiee.csv")[!is.na(alumnos)&alumnos>0]
+iiee[,gestion:=rapply(strsplit(gestion," -"),function(x) head(x,1))]
 
-# Seleccion de muestra piloto
-estratos <- unique(P$gestion)
-n <- c(15,15);names(n) <- estratos
-incprob <- lapply(estratos,function(x) inclusionprobabilities(P[gestion==x]$alumnos,n[x]))
-muestrap <- lapply(incprob,function(x) as.logical(UPsampford(x)))
+# Obtener total de alumnos, niveles y secciones
+# para cada colegio
+P <- iiee[,.(niveles=.N-1,alumnos=sum(alumnos),
+             alusec=sum(alumnos)/sum(secciones),
+             mixto=ifelse(unique(genero)=="Mixto",1,0)),.(codloc,gestion)]
 
-P[gestion==estratos[1]][muestrap[[1]]]
-P[gestion==estratos[2]][muestrap[[2]]]
-# CUIDADO CON LOS MISSING!
+# Seleccion de muestra piloto, n = 30
+    # Solo hay 10 colegios de gestion publica asi
+    # que podemos tomar un censo para ese estrato
+set.seed(2017)
+N <- table(P$gestion);n <- c(20,10)
+estratos <- unique(P$gestion);names(n) <- estratos
+
+incprob <- inclusionprobabilities(P[gestion==estratos[1]]$alumnos,n[estratos[1]])
+seleccion <- as.logical(UPsampford(incprob))
+muestra <- rbind(P[gestion==estratos[1]][seleccion],
+                 P[gestion==estratos[2]])
+muestra <- cbind(muestra,fpc=c(rep(N[1],n[1]),rep(N[2],n[2])),prob=c(incprob[which(seleccion)],rep(1,10)))
+
+# Especificar diseño para el estrato muestreado
+muestra_svy1 <- svydesign(ids=~0, fpc=~prob, pps="brewer", data=muestra[gestion==estratos[1]])
+muestra_svy2 <- svydesign(ids=~0, fpc=~prob, strata=~gestion, pps="brewer", data=muestra)
+
+# Estimacion de deff para las proporciones solicitadas
+svymean(~niveles+mixto, design=muestra_svy1, deff=TRUE)
+#svymean(~niveles+mixto, design=muestra_svy2, deff=TRUE)
+
+((68/78)**2)*(0.195849)**2
+
+### TIENES QUE VER COMO INCORPORAS LA NO VARIANZA DEL "CENSO"
 ```
+
+
 
 ---
 
 b) Halle un tamaño de muestra para este estudio de tal manera que se pueda estimar cualquiera de las proporciones pedidas con un margen de error no mayor a 0.1 a un nivel de confianza del 95%.
+
+---
+
+
+
+---
 
 c) Tome la muestra final, reportando tanto las estimaciones pedidas como sus errores de estimacion estimados.
