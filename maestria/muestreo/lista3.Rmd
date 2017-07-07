@@ -5,7 +5,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-wd <- "D:/Clases/estadisticaPUCP/muest/lista3"
+#wd <- "D:/Clases/estadisticaPUCP/muest/lista3"
+wd <- "D:/bfazio/maestria/monstreo/lista3"
 ```
 
 4. Suponga que la municipalidad de San Miguel lo ha contratado a usted para hacer un estudio. Ellos desean tener basicamente una idea del numero promedio de alumnos por seccion de sus colegios, la proporcion de colegios en el distrito que ofrecen todos los niveles de educacion escolar y la proporcion de colegios mixtos del distrito. Si bien esta informacion se encuentra en la pagina Web del ministerio de educacion, usted estimara estos parametros mediante un muestreo complejo. Este consistira en seleccionar los colegios mediante un muestreo ppt (proporcional al numero de estudiantes en el colegio), en cada uno de los dos estratos definidos en la poblacion: los colegios de gestion publica y los colegios de gestion privada.
@@ -47,19 +48,18 @@ muestra <- rbind(P[gestion==estratos[1]][seleccion],
                  P[gestion==estratos[2]])
 muestra <- cbind(muestra,fpc=c(rep(N[1],n[1]),rep(N[2],n[2])),prob=c(incprob[which(seleccion)],rep(1,10)))
 
-# Especificar diseño para el estrato muestreado
-muestra_svy1 <- svydesign(ids=~0, fpc=~prob, pps="brewer", data=muestra[gestion==estratos[1]])
-muestra_svy2 <- svydesign(ids=~0, fpc=~prob, strata=~gestion, pps="brewer", data=muestra)
+# Especificar diseño para el estrato muestreado y para MASs
+estrato_svy <- svydesign(ids=~0, fpc=~prob, pps="brewer", data=muestra[gestion==estratos[1]])
+mass_svy <- svydesign(ids=~0, fpc=~I(rep(sum(unique(fpc)),length(fpc))), data=muestra)
 
-# Estimacion de deff para las proporciones solicitadas
-svymean(~niveles+mixto, design=muestra_svy1, deff=TRUE)
-#svymean(~niveles+mixto, design=muestra_svy2, deff=TRUE)
-
-((68/78)**2)*(0.195849)**2
-
-### TIENES QUE VER COMO INCORPORAS LA NO VARIANZA DEL "CENSO"
+# Estimacion de varianza para las proporciones de interes
+muestra_v <- svymean(~niveles+mixto, design=estrato_svy, deff=TRUE)
+mass_v <- svymean(~niveles+mixto, design=mass_svy, deff=TRUE)
 ```
 
+Recordamos que la varianza de la media poblacional en un MAE viene dada por:
+
+$$\text{V}(\bar Y) = \sum_{h=1}^H \left(\frac{N_h}{N}\right)^2\text{V}(\bar Y_h)$$
 
 
 ---
