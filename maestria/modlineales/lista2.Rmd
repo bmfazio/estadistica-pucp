@@ -1,0 +1,101 @@
+---
+title: "Modelos Lineales - Lista 2"
+author: "Boris Fazio"
+date: "July 2, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+4. El archivo Journals.xls tiene 180 observaciones y 10 variables.
+
+4.1 Efectuar las regresiones necesarias para el contraste de heteroscedasticidad. Usar al menos 2 tipos de contrastes.
+
+---
+
+**Regresion de interes**
+
+```{r}
+data("Journals", package = "AER")
+journals <- with(data = Journals,
+                 data.frame(subs,price,citeprice=price/citations,age=2000-foundingyear))
+
+jour_lm <- lm(log(subs) ~ log(citeprice), data = journals)
+```
+
+**Contrastes**
+
+Exploracion grafica de magnitud de residuales
+
+```{r}
+plot(jour_lm, which = 3)
+# Se observa que los residuales tienen una menor magnitud
+# para valores mayores de la variable dependiente
+```
+
+Test de Spearman
+
+```{r}
+cor.test(abs(jour_lm$residuals),jour_lm$fitted.values,method = "spearman")
+# Verificamos que existe una correlacion monotonica entre
+# los valores predichos de la variable dependiente y la
+# magnitud de los residuales (p < 0.05)
+```
+
+Test de Breusch-Pagan
+
+```{r}
+lmtest::bptest(jour_lm)
+# Se rechaza la hipotesis de homoscedasticidad (p < 0.05)
+```
+
+Test de Goldfeld-Quant
+
+```{r}
+lmtest::gqtest(jour_lm, alternative = "two.sided", order.by = ~citeprice, data = journals)
+# Se rechaza la hipotesis de homoscedasticidad (p < 0.05)
+```
+
+Test de Harvey
+
+```{r}
+summary(lm(log(jour_lm$residuals**2) ~ jour_lm$fitted.values))
+# Se verifica que hay una asociacion significativa entre los
+# valores predichos y el logaritmo del cuadrado de residuos
+```
+
+Todas las pruebas aplicadas indican que la regresion investigada presenta heteroscedasticidad.
+
+---
+
+4.2 Si se detecta heteroscedasticidad, haga un esquema de su solucion y corrija el problema. Comente los resultados.
+
+---
+
+```{r}
+# Verificar que media de residuos no varia
+summary(lm(jour_lm$residuals ~ poly(log(jour_lm$fitted.values),2)))
+
+# Esto quiere decir que residuos tienen la forma e_i = c_i*d_i,
+# por lo que puede corregirse la 
+# Referencia
+#http://eml.berkeley.edu/~powell/e240b_sp06/hetnotes.pdf
+
+# 1) Estimar coeficiente de heteroscedasticidad
+hlm <- lm(I(jour_lm$residuals**2) ~ log(citeprice), data = journals)
+
+# 2) Aplicar regresion con regresores ajustados
+w <- predict(hlm)**(-0.5)
+w[]
+wls <- lm(I(log(subs)*w) ~ I(log(citeprice)*w), data = journals[!(journals$subs<3),])
+
+jour_lm2 <-  lm(log(subs) ~ log(citeprice), data = journals[!(journals$subs<3),])
+
+lres <- log(jour_lm2$residuals**2)
+jour_rlm <- lm(lres ~ log(journals$citeprice[-4])**2)
+hhat <- exp(jour_rlm$fitted.values)
+
+jour_wlm <- lm(log(subs) ~ log(citeprice), data = journals[!(journals$subs<3),], weights = 1/hhat)
+```
