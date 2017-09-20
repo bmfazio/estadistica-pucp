@@ -12,8 +12,7 @@ xgen <- function(n=1000,nvar=3){
 }
 
 murho2ab <- function(mu,rho){
-  c(alpha=((1/rho)-1)/(2-mu),
-    betap=((1-mu)*(1/rho)-1)/(2-mu))
+  # USAR VERSION MAS RECIENTE EN CASA
 }
 
 datagen <- function(x,coefs,lambda=3,rho=0.5,link=invlogit){
@@ -23,33 +22,10 @@ datagen <- function(x,coefs,lambda=3,rho=0.5,link=invlogit){
   
   mu <- link(as.matrix(x)%*%coefs)
   
-  alpha <- (mu**2)*(((1-mu)/phi) - (1/mu))
-  betap <- alpha*((1/mu)-1)
+  alpha <- murho2ab(mu,rho)[["alpha"]]
+  betap <- murho2ab(mu,rho)[["betap"]]
   
   cbind(data.frame(ntries,
-                      nsucc=rbinom(n,ntries,rbeta(n,alpha,betap))),x)
+                   nsucc=rbinom(n,ntries,rbeta(n,alpha,betap))),x)
   
 }
-
-bbt <- function(pars,obs,link=invlogit){
-
-  n <- obs$ntries
-  y <- obs$nsucc
-  x <- as.matrix(obs[,-(1:2)])
-  
-  alpha <- pars[1]
-  betap <- pars[2]
-  
-  # Calcular parametros de una beta canonica
-  alpha <- (mu**2)*(((1-mu)/phi) - (1/mu))
-  betap <- alpha*((1/mu)-1)
-  
-  # Log-verosimilitud de beta-binomial transformada
-  -sum((sum(log(beta(y+alpha,n+betap-y)))-length(n)*log(beta(alpha,betap))))
-  
-}
-
-###
-
-plot(0:100,dbetabinom(0:100,100,0.5,200000000))
-plot(0:100,dbinom(0:100,100,0.5))
