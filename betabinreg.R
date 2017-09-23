@@ -12,7 +12,13 @@ xgen <- function(n=1000,nvar=3){
 }
 
 murho2ab <- function(mu,rho){
-  # USAR VERSION MAS RECIENTE EN CASA
+  if(mu > 0 & mu < 1 & rho > 0 & rho < 1){
+    rhofact <- (1-rho)/rho
+    c(alpha=rhofact*mu,
+      beta=rhofact*(1-mu))  
+  } else{
+    warning("mu, rho must be between 0 and 1")
+  }
 }
 
 datagen <- function(x,coefs,lambda=3,rho=0.5,link=invlogit){
