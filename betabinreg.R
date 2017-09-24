@@ -1,5 +1,8 @@
+# Logistica inversa
 invlogit <- function(x)exp(x)/(1+exp(x))
 
+# Generar una matriz de X aleatorios
+# Por el momento, son iid N(0,0.5)
 xgen <- function(n=1000,nvar=3){
   if(nvar > 0){
     xdf<-data.frame(lapply(1:nvar,function(x)rnorm(n,sd=0.5)))
@@ -11,16 +14,19 @@ xgen <- function(n=1000,nvar=3){
   }
 }
 
+# Transformar mu y rho al alfa y beta que pide R para la beta
 murho2ab <- function(mu,rho){
   if(all(mu > 0 & mu < 1 & rho > 0 & rho < 1)){
     rhofact <- (1-rho)/rho
     list(alpha=rhofact*mu,
-      betap=rhofact*(1-mu))  
+         betap=rhofact*(1-mu))  
   } else{
     warning("mu, rho must be between 0 and 1")
   }
 }
 
+# Dado un vector de coeficientes y matriz de disenho,
+# generar las observaciones correspondientes
 datagen <- function(x,coefs,lambda=3,rho=0.5,link=invlogit){
   
   n <- nrow(x)
@@ -35,8 +41,9 @@ datagen <- function(x,coefs,lambda=3,rho=0.5,link=invlogit){
                    nsucc=rbinom(n,ntries,rbeta(n,alpha,betap))),x)
 }
 
+# LL betabinomial
 bbt <- function(pars,obs,link=invlogit){
-
+  
   n <- obs$ntries
   y <- obs$nsucc
   x <- as.matrix(obs[,-(1:2)])
@@ -48,28 +55,33 @@ bbt <- function(pars,obs,link=invlogit){
   alpha <- murho2ab(mu,rho)[["alpha"]]
   betap <- murho2ab(mu,rho)[["betap"]]
   
-  # Log-verosimilitud
+  # Log-verosimilitud con signo negativo
   -sum((sum(log(beta(y+alpha,n+betap-y)))-length(n)*log(beta(alpha,betap))))
 }
 
 ### Simulacion
-modbetas <- c(0.2,-0.4,0.1,0.25)
+
+# Contenedor para los resultados de simulacion
+# (numero de filas = numero de simulaciones)
 simures <- matrix(nrow=1000,ncol=5)
+
+# Vector de coeficientes
+modbetas <- c(0.2,-0.4,0.1,0.25)
 
 for(i in 1:nrow(simures)){
   simdata <- datagen(xgen(),coefs=modbetas,rho = 0.5)
   simures[i,] <- optim(par = c(0.1,0.5,0.5,0.5,0.5),bbt,obs=simdata)$par
-  print(i)
+  #cat(i," ")
 }
 
-par(mfrow=c(1,5))
-plot(density(simures[,1]))
-abline(v=0.5,col="red")
-plot(density(simures[,2]))
+par(mfrow=c(1,2))
+plot(density(simures[,2]),main = "beta0")
 abline(v=modbetas[1],col="red")
-plot(density(simures[,3]))
+plot(density(simures[,3]),main = "beta1")
 abline(v=modbetas[2],col="red")
-plot(density(simures[,4]))
+plot(density(simures[,4]),main = "beta2")
 abline(v=modbetas[3],col="red")
-plot(density(simures[,5]))
+plot(density(simures[,5]),main = "beta3")
 abline(v=modbetas[4],col="red")
+plot(density(simures[,1]),main = "phi")
+abline(v=0.5,col="red")
