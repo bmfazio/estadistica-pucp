@@ -42,7 +42,7 @@ datagen <- function(x,coefs,lambda=3,rho=0.5,link=invlogit){
 }
 
 # LL betabinomial
-bbt <- function(pars,obs,link=invlogit){
+bbt <- function(pars,obs,link=invlogit,vgam=FALSE){
   
   n <- obs$ntries
   y <- obs$nsucc
@@ -56,26 +56,52 @@ bbt <- function(pars,obs,link=invlogit){
   betap <- murho2ab(mu,rho)[["betap"]]
   
   # Log-verosimilitud con signo negativo
-  -sum((sum(log(beta(y+alpha,n+betap-y)))-length(n)*log(beta(alpha,betap))))
+  simmanu <- -sum((sum(log(beta(y+alpha,n+betap-y)))-length(n)*log(beta(alpha,betap))))
+  return(simmanu)
 }
+
+### Data real
+library(rio)
+library(data.table)
+msm <- import("C:/Users/ASUS/Desktop/Hughes-Bayes/Datasets/msm_risk_new5.dta", setclass = "data.table")
+
+rbind(msm[,.(ins=qsmp1isx,rec=qsmp1rsx)],
+      msm[,.(ins=qsmp2isx,rec=qsmp2rsx)],
+      msm[,.(ins=qsmp3isx,rec=qsmp3rsx)]) -> sxdat
+
+sxdat[!is.na(ins)&!is.na(rec),.(ntries=ins+rec,nsucc=ins)]
+sxdat[,const:=1]
+#sxdat[,ntries:=as.numeric(ntries)]
+
+okz <- optim(par = c(0.5,0.5),bbt,obs=sxdat)$par
+betapars <- murho2ab(invlogit(okz[2]),okz[1])
+
+curve(dbeta(x,betapars[[1]],betapars[[2]]))
+
+
+
+
+
 
 ### Simulacion
 
 # Contenedor para los resultados de simulacion
 # (numero de filas = numero de simulaciones)
-simures <- matrix(nrow=1000,ncol=5)
+simuresManu <- matrix(nrow=1000,ncol=5)
 
 # Vector de coeficientes
 modbetas <- c(0.2,-0.4,0.1,0.25)
 
-for(i in 1:nrow(simures)){
+set.seed(1)
+for(i in 1:nrow(simuresManu)){
   simdata <- datagen(xgen(),coefs=modbetas,rho = 0.5)
-  simures[i,] <- optim(par = c(0.1,0.5,0.5,0.5,0.5),bbt,obs=simdata)$par
-  #cat(i," ")
+  simuresManu[i,] <- optim(par = c(0.1,0.5,0.5,0.5,0.5),bbt,obs=simdata)$par
+  print(i)
 }
+set.seed(1)
 
 par(mfrow=c(1,2))
-plot(density(simures[,2]),main = "beta0")
+plot(density(simuresManu[,2]),main = "beta0")
 abline(v=modbetas[1],col="red")
 plot(density(simures[,3]),main = "beta1")
 abline(v=modbetas[2],col="red")
