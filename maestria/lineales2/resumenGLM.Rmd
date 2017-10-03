@@ -50,3 +50,9 @@ $\xi_{RV} \sim \chi^2_q$ donde $q$ es el numero de restricciones
 * Estadistica F
 
 ...
+
+### Extra
+
+**Transformaciones monotonicas de v.a.**
+
+Ver eq. 11.4: https://www.cl.cam.ac.uk/teaching/2003/Probability/prob11.pdf
