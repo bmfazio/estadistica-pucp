@@ -8,6 +8,94 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+### Familia exponencial
+
+Cualquier pdf/pmf con la forma $f(y\mid\theta,\phi) = \exp\{\phi[\theta y-b(\theta)] + c(y,\phi)\}$, $\phi > 0$
+
+* $\text{E}(Y) = \mu = b'(\theta)$
+* $\text{Var}(Y) = \phi^{-1}b''(\theta) = \phi^{-1}\text{V}(\mu)$
+
+### Funcion generadora de momentos
+
+$M_Y(t)=\exp\{\phi[b(\phi t+\theta)-b(\theta)]\}$
+
+### Propiedad (no se pa q sirve)
+
+Cuando $\phi \rightarrow \infty$, $\sqrt{\phi}(Y-\mu) \rightarrow N(0,V(\mu))$
+
+### Funcion de enlace canonica
+
+La $g(.)$ funcion tal que $g(\mu_i) = \theta_i = \eta_i$ se conoce como enlace canonico.
+
+### Funcion de desvio
+
+Se da por la diferencia entre verosimilitud del modelo saturado y el de interes
+
+$$\begin{align}
+D(y,\hat\mu) &= 2\phi^{-1}[L(y,y) - L(\hat\mu,y)] \\&= 2\sum_{i=1}^n\{y_i(\widetilde\theta_i-\hat\theta_i)+(b(\hat\theta_i)-b(\widetilde\theta_i))\}
+\end{align}$$
+
+Reemplazando $\widetilde\theta(y_i)$ y $\hat\theta(\eta_i)$ por las funciones correspondientes.
+
+**HACER CASOS PARTICULARES A MANO!**
+
+### Comparacion de modelos
+
+* Estadistica de Razon de Verosimilitudes
+
+$\xi_{RV} = \phi\{D(y,\hat\mu_r)-D(y,\hat\mu)\}$, donde $\hat\mu_r$ se calcula bajo la restriccion de interes
+
+$\xi_{RV} \sim \chi^2_q$ donde $q$ es el numero de restricciones
+
+* Estadistica F
+
+...
+
+* AIC
+
+$\text{AIC} = D^*(y,\hat\mu)+2p$
+
+## Extra
+
+### Calculo de AIC con logLik del modelo
+
+-2*as.numeric(logLik(MODELO))+2*length(MODELO$coefficients)+2
+
+### Formas exponenciales de distribuciones conocidas
+
+**Normal**
+
+$\theta = \mu;\phi=\frac{1}{\sigma^2}$
+
+$b(\theta)=\frac{1}{2}\theta^2;c(x,\phi)=\log\left(\sqrt{\frac{\phi}{2\pi}}\right) - \frac{\phi x^2}{2}$
+
+$D(y,\hat\mu) = \sum_{i=1}^n\left[y_i - \hat\mu_i\right]^2$
+
+**Binomial**
+
+$\theta = \log{\frac{p}{1-p}}; \phi = 1$
+
+$b(\theta)=n\log(1+e^\theta); c(x,\phi)=\log{n\choose y}$
+
+$D(y,\hat\mu)=$
+
+### Otros
+
+**Transformaciones monotonicas de v.a.**
+
+$g(y)=f(x(y))\left|\frac{dx}{dy}\right|$
+
+Ver eq. 11.4: https://www.cl.cam.ac.uk/teaching/2003/Probability/prob11.pdf
+---
+title: "GLMs"
+author: "Boris Fazio"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 **Familia exponencial**
 
 Cualquier pdf/pmf con la forma $f(y\mid\theta,\phi) = \exp\{\phi[\theta y-b(\theta)] + c(y,\phi)\}$, $\phi > 0$
