@@ -1,0 +1,22 @@
+---
+title: "Lista 1 - Inferencia"
+author: "Boris Fazio"
+date: "2 de noviembre de 2017"
+output: html_document
+---
+
+## oli
+
+wapo
+
+$$\begin{align}
+\hat\theta_1 &= \frac{1}{n}\sum_{i=1}^nX_i^2\\
+\hat\theta_2 &= a(\bar X)^2
+\end{align}$$
+
+$$\begin{align}
+\text{E}[\hat\theta_1] &= \text{E}\left[\frac{1}{n}\sum_{i=1}^nX_i^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\left(\text{V}\left[X_i\right]+\text{E}\left[X_i\right]^2\right)\\
+&= \frac{1}{n}\sum_{i=1}^n\left[\theta\left(\Gamma(2)+\Gamma(1.5)^2\right)+\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
+\end{align}$$
