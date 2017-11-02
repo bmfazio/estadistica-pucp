@@ -19,4 +19,6 @@ $$\begin{align}
 &= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i^2\right]\\
 &= \frac{1}{n}\sum_{i=1}^n\left(\text{V}\left[X_i\right]+\text{E}\left[X_i\right]^2\right)\\
 &= \frac{1}{n}\sum_{i=1}^n\left[\theta\left(\Gamma(2)+\Gamma(1.5)^2\right)+\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\left[\theta(1+\pi)\right]\\
+&= \theta(1+\pi)\\
 \end{align}$$
