@@ -14,8 +14,21 @@ $$\begin{align}
 \hat\theta_2 &= a(\bar X)^2
 \end{align}$$
 
+a) sesgo de $theta_1$
+
 $$\begin{align}
 \text{E}[\hat\theta_1] &= \text{E}\left[\frac{1}{n}\sum_{i=1}^nX_i^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\left(\text{V}\left[X_i\right]+\text{E}\left[X_i\right]^2\right)\\
+&= \frac{1}{n}\sum_{i=1}^n\left[\theta\left(\Gamma(2)+\Gamma(1.5)^2\right)+\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\left[\theta(1+\pi)\right]\\
+&= \theta(1+\pi)\\
+\end{align}$$
+
+b) sesgo de $theta_2$
+
+$$\begin{align}
+\text{E}[\hat\theta_2] &= \text{E}\left[\frac{1}{n}\bar X^2\right]\\
 &= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i^2\right]\\
 &= \frac{1}{n}\sum_{i=1}^n\left(\text{V}\left[X_i\right]+\text{E}\left[X_i\right]^2\right)\\
 &= \frac{1}{n}\sum_{i=1}^n\left[\theta\left(\Gamma(2)+\Gamma(1.5)^2\right)+\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
