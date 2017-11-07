@@ -21,11 +21,13 @@ $$\begin{align}
 &= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i^2\right]\\
 &= \frac{1}{n}\sum_{i=1}^n\left(\text{V}\left[X_i\right]+\text{E}\left[X_i\right]^2\right)\\
 &\text{Reemplazamos con los valores de los parametros}\\
-&= \frac{1}{n}\sum_{i=1}^n\left[\theta\left(\Gamma(2)+\Gamma(1.5)^2\right)+\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
-&= \frac{1}{n}\sum_{i=1}^n\left[\theta(1+\pi)\right]\\
-&= \theta(1+\pi)\\
+&= \frac{1}{n}\sum_{i=1}^n\left[\theta\left(\Gamma(2)-\Gamma(1.5)^2\right)+\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\theta\\
+&= \theta
 \end{align}$$
-  
+
+Por lo tanto, $\hat\theta_1$ es insesgado.
+
 b) sesgo de $theta_2$
   
 $$\begin{align}
@@ -35,4 +37,18 @@ $$\begin{align}
 &= \frac{a}{n^2}\left(2\sum_{\substack{i=1\\j>i}}^n\text{E}\left[X_iX_j\right] + \sum_{i=1}^n\text{E}\left[X_i^2\right]\right)\\
 &\text{Dado que la muestra es aleatoria, E}\left[X_iX_j\right] = \text{E}\left[X_i\right]\text{E}\left[X_j\right]\\
 &= \frac{a}{n^2}\left(2\sum_{i=1}^{n(n-1)\over 2}\text{E}\left[X\right]^2 + \sum_{i=1}^n\left(\text{V}\left[X\right]+\text{E}\left[X\right]^2\right)\right)\\
+&= \frac{a}{n}\left(\text{V}\left[X\right]+n\text{E}\left[X\right]^2\right)\\
+&= \frac{a}{n}\left[\theta\left(\Gamma(2)-\Gamma(1.5)^2\right)+n\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
+&= a\theta\left(\frac{4-(n-1)\pi}{4n}\right)
+\end{align}$$
+
+$\hat\theta_2$ sera insesgado para $a = \frac{4n}{4-(n-1)\pi}$.
+
+c) sesgo de $\hat\theta_c$
+
+$$\begin{align}
+\text{E}[\hat\theta_c] &= \text{E}\left[c\hat\theta_1 + (1-c)\hat\theta_2\right]\\
+&= c\text{E}\left[\hat\theta_1\right] + (1-c)\text{E}\left[\hat\theta_2\right]\\
+&= c\theta + (1-c)\theta\\
+&= \theta
 \end{align}$$
