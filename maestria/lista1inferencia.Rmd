@@ -10,6 +10,13 @@ output: html_document
 wapo
 
 $$\begin{align}
+\text{E}\left[X\right] &= \beta^{-1/\alpha}\Gamma\left(1+\frac{1}{\alpha}\right)\\
+&= \theta^{1/2}\Gamma\left(1.5\right) = \frac{1}{2}\sqrt{\theta\pi}\\
+\text{V}\left[X\right] &= \beta^{-2/\alpha}\left(\Gamma\left(1+\frac{2}{\alpha}\right)-\Gamma\left(1+\frac{1}{\alpha}\right)^2\right)\\
+&= \theta\left(\Gamma\left(2\right)-\Gamma\left(1.5\right)^2\right) = \theta\left(1-\frac{\pi}{4}\right)
+\end{align}$$
+
+$$\begin{align}
 \hat\theta_1 &= \frac{1}{n}\sum_{i=1}^nX_i^2\\
 \hat\theta_2 &= a(\bar X)^2
 \end{align}$$
@@ -33,16 +40,16 @@ b) sesgo de $theta_2$
 $$\begin{align}
 \text{E}[\hat\theta_2] &= \text{E}\left[a\bar X^2\right]\\
 &= \frac{a}{n^2}\text{E}\left[\left(\sum_{i=1}^nX_i\right)^2\right]\\
-&= \frac{a}{n^2}\text{E}\left[2\sum_{\substack{i=1\\j>i}}^nX_iX_j + \sum_{i=1}^nX_i^2\right]\\
-&= \frac{a}{n^2}\left(2\sum_{\substack{i=1\\j>i}}^n\text{E}\left[X_iX_j\right] + \sum_{i=1}^n\text{E}\left[X_i^2\right]\right)\\
+&= \frac{a}{n^2}\text{E}\left[2\sum_{\substack{i=1\\j>i}}^{n-1}X_iX_j + \sum_{i=1}^nX_i^2\right]\\
+&= \frac{a}{n^2}\left(2\sum_{\substack{i=1\\j>i}}^{n-1}\text{E}\left[X_iX_j\right] + \sum_{i=1}^n\text{E}\left[X_i^2\right]\right)\\
 &\text{Dado que la muestra es aleatoria, E}\left[X_iX_j\right] = \text{E}\left[X_i\right]\text{E}\left[X_j\right]\\
 &= \frac{a}{n^2}\left(2\sum_{i=1}^{n(n-1)\over 2}\text{E}\left[X\right]^2 + \sum_{i=1}^n\left(\text{V}\left[X\right]+\text{E}\left[X\right]^2\right)\right)\\
 &= \frac{a}{n}\left(\text{V}\left[X\right]+n\text{E}\left[X\right]^2\right)\\
 &= \frac{a}{n}\left[\theta\left(\Gamma(2)-\Gamma(1.5)^2\right)+n\left(\sqrt{\theta}\Gamma(1.5)\right)^2\right]\\
-&= a\theta\left(\frac{4-(n-1)\pi}{4n}\right)
+&= a\theta\left(\frac{4+(n-1)\pi}{4n}\right)
 \end{align}$$
 
-$\hat\theta_2$ sera insesgado para $a = \frac{4n}{4-(n-1)\pi}$.
+$\hat\theta_2$ sera insesgado para $a = \frac{4n}{4+(n-1)\pi}$.
 
 c) sesgo de $\hat\theta_c$
 
@@ -51,4 +58,16 @@ $$\begin{align}
 &= c\text{E}\left[\hat\theta_1\right] + (1-c)\text{E}\left[\hat\theta_2\right]\\
 &= c\theta + (1-c)\theta\\
 &= \theta
+\end{align}$$
+
+d) consistencia fuerte
+
+e) varianza de $\hat\theta_1$
+
+$$\begin{align}
+\text{V}[\hat\theta_1] &= \text{E}\left[\left(\frac{1}{n}\sum_{i=1}^nX_i^2\right)^2\right]-\text{E}\left[\hat\theta_1\right]^2\\
+&= \frac{1}{n^2}\left(\sum_{i=1}^n\text{E}\left[X_i^4\right] + 2\sum_{\substack{i=1\\j>i}}^{n-1}\text{E}\left[X_i^2X_j^2\right]\right)-\theta^2\\
+&= \frac{1}{n}\left(\text{E}\left[X^4\right] + (n-1)\text{E}\left[X^2\right]^2\right)-\theta^2\\
+&= \frac{1}{n}\left(\theta^2\Gamma\left(3\right) + (n-1)\theta^2\Gamma(2)^2\right)-\theta^2\\
+&= \frac{\theta^2}{n}
 \end{align}$$
