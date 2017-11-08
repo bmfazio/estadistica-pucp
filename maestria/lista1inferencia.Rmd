@@ -104,23 +104,6 @@ $$\begin{align}
 &= p&&= mp&&= p&&= p
 \end{align}$$
 
-$$\begin{align}
-\text{E}[\hat p_2] &= \text{E}\left[\bar X\right]\\
-&= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i\right]\\
-&= \frac{1}{n}\sum_{i=1}^nmp\\
-&= mp
-\end{align}$$
+falta eficiencia
 
-$$\begin{align}
-\text{E}[\hat p_3] &= \text{E}\left[\frac{X_1 + X_n}{2m}\right]\\
-&= \frac{1}{2m}\left(\text{E}\left[X_1\right]+\text{E}\left[X_n\right]\right)\\
-&= \frac{1}{2m}2mp\\
-&= p
-\end{align}$$
-
-$$\begin{align}
-\text{E}[\hat p_4] &= \text{E}\left[\frac{X_1}{m}\right]\\
-&= \frac{1}{m}\text{E}\left[X_1\right]\\
-&= \frac{1}{m}mp\\
-&= p
-\end{align}$$
+b) probabilidad maxima de error (probabilidad de 7, 8, 9)
