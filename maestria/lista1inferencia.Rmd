@@ -7,7 +7,7 @@ output: html_document
   
 ## oli
   
-wapo
+1. wapo
 
 $$\begin{align}
 \text{E}\left[X\right] &= \beta^{-1/\alpha}\Gamma\left(1+\frac{1}{\alpha}\right)\\
@@ -70,4 +70,57 @@ $$\begin{align}
 &= \frac{1}{n}\left(\text{E}\left[X^4\right] + (n-1)\text{E}\left[X^2\right]^2\right)-\theta^2\\
 &= \frac{1}{n}\left(\theta^2\Gamma\left(3\right) + (n-1)\theta^2\Gamma(2)^2\right)-\theta^2\\
 &= \frac{\theta^2}{n}
+\end{align}$$
+
+f) g) wtf is des chet
+
+2.
+
+$\hat\alpha = a+b\sum_{i=1}^nX_i$
+
+a) $a$ $b$ para insesgao
+
+$$\begin{align}
+\text{E}[\hat\alpha] &= \text{E}\left[a+b\sum_{i=1}^nX_i\right]\\
+&= a+b\sum_{i=1}^n\text{E}\left[X_i\right]\\
+&= a+bn(1.5-\alpha)
+\end{align}$$
+
+Con $a = 1.5$ y $b = -n^{-1}$, $\hat\alpha$ es insesgado.
+
+b) cramer rao... chasawa???
+
+
+4.
+
+$$\hat p_1 = \frac{\bar X}{m} \text{, } \hat p_2 = \bar X \text{, } \hat p_3 = \frac{X_1 + X_n}{2m} \text{ y } \hat p_4 = \frac{X_1}{m}$$
+
+a) cual es insesgau
+
+$$\begin{align}
+\text{E}[\hat p_1] &= \text{E}\left[\frac{\bar X}{m}\right]&\text{E}[\hat p_2] &= \text{E}\left[\bar X\right]&\text{E}[\hat p_3] &= \text{E}\left[\frac{X_1 + X_n}{2m}\right]&\text{E}[\hat p_4] &= \text{E}\left[\frac{X_1}{m}\right]\\
+&= \frac{1}{mn}\sum_{i=1}^n\text{E}\left[X_i\right]&&= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i\right]&&= \frac{1}{2m}\left(\text{E}\left[X_1\right]+\text{E}\left[X_n\right]\right)&&= \frac{1}{m}\text{E}\left[X_1\right]\\
+&= \frac{1}{mn}\sum_{i=1}^nmp&&= \frac{1}{n}\sum_{i=1}^nmp&&= \frac{1}{2m}2mp&&= \frac{1}{m}mp\\
+&= p&&= mp&&= p&&= p
+\end{align}$$
+
+$$\begin{align}
+\text{E}[\hat p_2] &= \text{E}\left[\bar X\right]\\
+&= \frac{1}{n}\sum_{i=1}^n\text{E}\left[X_i\right]\\
+&= \frac{1}{n}\sum_{i=1}^nmp\\
+&= mp
+\end{align}$$
+
+$$\begin{align}
+\text{E}[\hat p_3] &= \text{E}\left[\frac{X_1 + X_n}{2m}\right]\\
+&= \frac{1}{2m}\left(\text{E}\left[X_1\right]+\text{E}\left[X_n\right]\right)\\
+&= \frac{1}{2m}2mp\\
+&= p
+\end{align}$$
+
+$$\begin{align}
+\text{E}[\hat p_4] &= \text{E}\left[\frac{X_1}{m}\right]\\
+&= \frac{1}{m}\text{E}\left[X_1\right]\\
+&= \frac{1}{m}mp\\
+&= p
 \end{align}$$
