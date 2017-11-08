@@ -107,3 +107,5 @@ $$\begin{align}
 falta eficiencia
 
 b) probabilidad maxima de error (probabilidad de 7, 8, 9)
+
+c) https://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/NormalGaussians/SumofNormals/sumofnormals.pdf
