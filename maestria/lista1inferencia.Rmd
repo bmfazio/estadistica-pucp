@@ -90,6 +90,54 @@ Con $a = 1.5$ y $b = -n^{-1}$, $\hat\alpha$ es insesgado.
 
 b) cramer rao... chasawa???
 
+3.
+
+$X \sim \text{U}(0,2\theta)$
+
+a) hallar MELI
+
+$$\begin{align}
+\text{E}\left[\hat\theta_n\right] &= \text{E}\left[\sum_{i=1}^na_iX_i\right]\\
+&= \sum_{i=1}^na_i\text{E}\left[X_i\right]\\
+&= \theta\sum_{i=1}^na_i\\
+\end{align}$$
+
+Para obtener $\hat\theta_n$ insesgado, requerimos $\sum_{i=1}^na_i = 1$. Podemos expresar los $a_i$ en terminos de su valor medio y las desviaciones individuales, $\sum_{i=1}^n(\frac{1}{n}+d_i)$, lo que implica que $\sum_{i=1}^nd_i = 0$.
+
+$$\begin{align}
+\text{V}\left[\hat\theta_n\right] &= \text{V}\left[\sum_{i=1}^na_iX_i\right]\\
+&= \sum_{i=1}^na_i^2\text{V}\left[X_i\right]\\
+&= \frac{\theta^2}{3}\sum_{i=1}^n\left(\frac{1}{n} + d_i\right)^2\\
+&= \frac{\theta^2}{3}\left(\sum_{i=1}^n\frac{1}{n^2} + \sum_{i=1}^n\frac{2d_i}{n} + \sum_{i=1}^nd_i^2\right)\\
+&= \frac{\theta^2}{3}\left(\frac{1}{n} + \sum_{i=1}^nd_i^2\right)\\
+\end{align}$$
+
+Por lo tanto, la varianza es minima cuando $d_i = 0$, lo que implica $a_i = 1/n$. Entonces, el MELI viene dado por
+
+$$\hat\theta_n^\star = \frac{1}{n}\sum_{i=1}^nX_i$$
+
+b) consistencia
+
+Dado que $\hat\theta_n^\star$ es insesgado y
+
+$$\lim_{n \to \infty}V\left(\hat\theta_n^\star\right) = \lim_{n \to \infty}\theta^2/3n = 0$$
+
+podemos aplicar Chebychev y verificamos que
+
+
+$$\lim_{n\to\infty}\text{P}\left(|\hat\theta_n^\star - \theta| \geq \epsilon\right) = 0$$
+
+c) distrib maximo
+
+Hallamos $C$ para tener $\tilde \theta$ insesgado:
+
+$$\begin{align}
+\text{E}\left[\tilde\theta\right] &= C\text{E}\left[\max \{X_1,...,X_n\} \right]\\
+&= C\int_{-\infty}^{\infty} x nf_X(x)F_X(x)^{(n-1)}dx\\
+&= Cn\int_{0}^{2\theta} x \frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx\\
+&= Cn\int_{0}^{2\theta} x \frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx\\
+
+\end{align}$$
 
 4.
 
