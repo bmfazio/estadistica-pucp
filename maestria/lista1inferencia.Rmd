@@ -104,7 +104,16 @@ $$\begin{align}
 &= p&&= mp&&= p&&= p
 \end{align}$$
 
-falta eficiencia
+evaluar eficiencia
+
+$$\begin{align}
+\text{V}[\hat p_1] &= \text{V}\left[\frac{\bar X}{m}\right]&\text{V}[\hat p_3] &= \text{V}\left[\frac{X_1 + X_n}{2m}\right]&\text{V}[\hat p_4] &= \text{V}\left[\frac{X_1}{m}\right]\\
+&= \frac{1}{m^2n^2}\sum_{i=1}^n\text{V}\left[X_i\right]&&= \frac{1}{4m^2}\left(\text{V}\left[X_1\right]+\text{V}\left[X_n\right]\right)&&= \frac{1}{m^2}\text{V}\left[X_1\right]\\
+&= \frac{1}{m^2n^2}\sum_{i=1}^nmp(1-p)&&= \frac{1}{4m^2}2mp(1-p)&&= \frac{1}{m^2}mp(1-p)\\
+&= \frac{p(1-p)}{nn}&&= \frac{p(1-p)}{2m}&&= \frac{p(1-p)}{m}
+\end{align}$$
+
+La varianza de $\hat p_1$ es menor para $n > 2$, por lo que siempre es tan o mas eficiente que los otros estimadores bajo consideracion.
 
 b) probabilidad maxima de error (probabilidad de 7, 8, 9)
 
