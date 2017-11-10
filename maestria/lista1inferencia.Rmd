@@ -111,6 +111,8 @@ g) Mostrar que $\frac{\sqrt{n}\left(\hat\theta_1-\theta\right)}{2\sqrt{\hat\thet
 
 ---
 
+de repente puedes tomar convergencia de cada factor (numerador x denominador^-1) y luego ver convergencia del producto
+
 ---
 
 2. Considere una muestra aleatoria de $n$ observaciones de $X$ tal que
@@ -257,6 +259,17 @@ $$\begin{align}
 
 c) Si $n$ es suficientemente grande, determine la distribucion aproximada de $\hat p_1$
 
+---
 
+El teorema del limite central indica que
+
+$$Z_n = \frac{\sqrt n (\bar X - \mu)}{\sigma} \xrightarrow{\mathcal D} \text{N}(0,1)$$
+
+Creo q necesito esto... ? ?? ?
+https://en.wikipedia.org/wiki/Cramér–Wold_theorem
+
+Entonces,
 
 https://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/NormalGaussians/SumofNormals/sumofnormals.pdf
+
+---
