@@ -13,9 +13,9 @@ $$\begin{align}
 \hat\theta_1 =\frac{1}{n}\sum_{i=1}^nX_i^2&&y&&\hat\theta_2 = a(\bar X)^2
 \end{align}$$
 
----
-
 a) Verificar si $\hat\theta_1$ es un estimador insesgado de $\theta$
+
+---
   
 $$\begin{align}
 \text{E}[\hat\theta_1] &= \text{E}\left[\frac{1}{n}\sum_{i=1}^nX_i^2\right]\\
@@ -28,7 +28,11 @@ $$\begin{align}
 
 Por lo tanto, $\hat\theta_1$ es insesgado.
 
+---
+
 b) Hallar $a$ tal que $\hat\theta_2$ sea insesgado
+  
+---
   
 $$\begin{align}
 \text{E}[\hat\theta_2] &= \text{E}\left[a\bar X^2\right]\\
@@ -44,7 +48,11 @@ $$\begin{align}
 
 Entonces $\hat\theta_2$ sera insesgado para $a = \frac{4n}{4+(n-1)\pi}$.
 
+---
+
 c) Si $\hat\theta_2$ es el estimador insesgado hallado en b), mostrar que que todo elemento de $\{\hat\theta_c = c\hat\theta_1 + (1-c)\hat\theta_2\}_{c\in [0,1]}$ es un estimador insesgado de $\theta$.
+
+---
 
 $$\begin{align}
 \text{E}[\hat\theta_c] &= \text{E}\left[c\hat\theta_1 + (1-c)\hat\theta_2\right]\\
@@ -55,9 +63,15 @@ $$\begin{align}
 
 Entonces $\hat\theta_c$ es insesgado para cualquier valor de $c$.
 
+---
+
 d) Estudiar la consistencia fuerte de $\hat\theta_1$ y $\hat\theta_2$
 
+---
+
 e) Hallar la varianza de $\hat\theta_1$
+
+---
 
 $$\begin{align}
 \text{V}[\hat\theta_1] &= \text{E}\left[\left(\frac{1}{n}\sum_{i=1}^nX_i^2\right)^2\right]-\text{E}\left[\hat\theta_1\right]^2\\
@@ -67,15 +81,32 @@ $$\begin{align}
 &= \frac{\theta^2}{n}
 \end{align}$$
 
+---
+
 f) Determinar si $\hat\theta_1$ es un estimador suficiente para $\theta$
+
+---
 
 g) Mostrar que $\frac{\sqrt{n}\left(\hat\theta_1-\theta\right)}{2\sqrt{\hat\theta_1}} \xrightarrow{\mathcal{D}} \text{N}(0,h)$ y determinar el valor de $h$
 
-2.
+---
 
-$\hat\alpha = a+b\sum_{i=1}^nX_i$
+2. Considere una muestra aleatoria de $n$ observaciones de $X$ tal que
 
-a) $a$ $b$ para insesgao
+$$\begin{align}
+f_X(x\mid\alpha)=
+\begin{cases}
+\alpha&,0<x\leq1\\
+1-\alpha&,1<x\leq2\\
+0&,\text{en otro caso}
+\end{cases}
+\end{align}$$
+
+y un estadistico $\hat\alpha = a+b\sum_{i=1}^nX_i$
+
+a) Determinar los valores de $a$ y $b$ para que $\hat\alpha$ sea un estimador insesgado de $\alpha$.
+
+---
 
 $$\begin{align}
 \text{E}[\hat\alpha] &= \text{E}\left[a+b\sum_{i=1}^nX_i\right]\\
@@ -85,13 +116,17 @@ $$\begin{align}
 
 Con $a = 1.5$ y $b = -n^{-1}$, $\hat\alpha$ es insesgado.
 
+---
+
 b) cramer rao... chasawa???
 
-3.
+---
 
-$X \sim \text{U}(0,2\theta)$
+3. Se tiene una muestra de $n$ observaciones de $X\sim\text{U}(0,2\theta)$
 
-a) hallar MELI
+a) Halle el MELI de $\theta$
+
+---
 
 $$\begin{align}
 \text{E}\left[\hat\theta_n\right] &= \text{E}\left[\sum_{i=1}^na_iX_i\right]\\
@@ -113,7 +148,11 @@ Por lo tanto, la varianza es minima cuando $d_i = 0$, lo que implica $a_i = 1/n$
 
 $$\hat\theta_n^\star = \frac{1}{n}\sum_{i=1}^nX_i$$
 
-b) consistencia
+---
+
+b) Analice la consistencia de $\hat\theta_n^\star$
+
+---
 
 Dado que $\hat\theta_n^\star$ es insesgado y
 
@@ -124,7 +163,9 @@ podemos aplicar Chebychev y verificamos que
 
 $$\lim_{n\to\infty}\text{P}\left(|\hat\theta_n^\star - \theta| \geq \epsilon\right) = 0$$
 
-c) distrib maximo
+---
+
+c) Determine si el estimador insesgado $\tilde\theta = C\max \{X_1,...,X_n\}$ es mejor que el MELI
 
 Hallamos $C$ para tener $\tilde \theta$ insesgado:
 
@@ -137,18 +178,27 @@ $$\begin{align}
 &= C\frac{2n}{n+1}\theta\\
 \end{align}$$
 
-Con $C = \frac{n+1}{2n}$ se tiene el estimador insesgado. Evaluamos varianza:
+Con $C = \frac{n+1}{2n}$ se tiene el estimador insesgado. Evaluamos su varianza:
 
 $$\begin{align}
 \text{V}\left[\tilde\theta\right] &= \text{E}\left[\tilde\theta^2 \right]-\text{E}\left[\tilde\theta \right]^2\\
-&= C^2\int_{0}^{2\theta} x^2 \frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx - \theta^2\\
-&= \frac{C^2}{\left(2\theta\right)^n}\frac{(2\theta)^{n+2}}{n+2} - \theta^2\\
+&= C^2\int_{0}^{2\theta} x^2 n\frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx - \theta^2\\
+&= C^2\frac{n(2\theta)^{n+2}}{\left(2\theta\right)^n(n+2)} - \theta^2\\
+&= \theta^2\left(\frac{(n+1)^2}{4n^2}\frac{4n}{n+2} - 1\right)\\
+&= \theta^2
 \end{align}$$
-4.
+
+Entonces este estimador no es mejor ya que su varianza es mas alta para cualquier $n$ que se tome.
+
+---
+
+4. Se toma una muestra de $n$ observaciones de $X \sim \text{B}(m,p)$ con $m$ conocido. Consideres los estimadores
 
 $$\hat p_1 = \frac{\bar X}{m} \text{, } \hat p_2 = \bar X \text{, } \hat p_3 = \frac{X_1 + X_n}{2m} \text{ y } \hat p_4 = \frac{X_1}{m}$$
 
-a) cual es insesgau
+a) Determine cuales son insesgados y de ese grupo, el mas eficiente
+
+---
 
 $$\begin{align}
 \text{E}[\hat p_1] &= \text{E}\left[\frac{\bar X}{m}\right]&\text{E}[\hat p_2] &= \text{E}\left[\bar X\right]&\text{E}[\hat p_3] &= \text{E}\left[\frac{X_1 + X_n}{2m}\right]&\text{E}[\hat p_4] &= \text{E}\left[\frac{X_1}{m}\right]\\
@@ -157,18 +207,22 @@ $$\begin{align}
 &= p&&= mp&&= p&&= p
 \end{align}$$
 
-evaluar eficiencia
+Entonces $\hat p_2$ es el unico estimador bajo consideracion que no es insesgado.
 
 $$\begin{align}
 \text{V}[\hat p_1] &= \text{V}\left[\frac{\bar X}{m}\right]&\text{V}[\hat p_3] &= \text{V}\left[\frac{X_1 + X_n}{2m}\right]&\text{V}[\hat p_4] &= \text{V}\left[\frac{X_1}{m}\right]\\
 &= \frac{1}{m^2n^2}\sum_{i=1}^n\text{V}\left[X_i\right]&&= \frac{1}{4m^2}\left(\text{V}\left[X_1\right]+\text{V}\left[X_n\right]\right)&&= \frac{1}{m^2}\text{V}\left[X_1\right]\\
 &= \frac{1}{m^2n^2}\sum_{i=1}^nmp(1-p)&&= \frac{1}{4m^2}2mp(1-p)&&= \frac{1}{m^2}mp(1-p)\\
-&= \frac{p(1-p)}{nn}&&= \frac{p(1-p)}{2m}&&= \frac{p(1-p)}{m}
+&= \frac{p(1-p)}{nm}&&= \frac{p(1-p)}{2m}&&= \frac{p(1-p)}{m}
 \end{align}$$
 
 La varianza de $\hat p_1$ es menor para $n > 2$, por lo que siempre es tan o mas eficiente que los otros estimadores bajo consideracion.
 
-b) probabilidad maxima de error (probabilidad de 7, 8, 9)
+---
+
+b) Dado $p = 0.8$, $n = 10$ y $m = 1$, calcule la probabilidad de que $\hat p_1$ produzca un error de estimacion no mayor a $0.1$.
+
+---
 
 $$\begin{align}
 \text{P}\left(0.7 \leq \hat p_1 \leq 0.9\right)_{m = 1, p = 0.8; n = 10} &= \text{P}\left(0.7 \leq \frac{1}{10}\sum_{i=1}^{10}X_i \leq 0.9 \right)\\
@@ -177,4 +231,10 @@ $$\begin{align}
 &\approx 0.77 
 \end{align}$$
 
-c) https://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/NormalGaussians/SumofNormals/sumofnormals.pdf
+---
+
+c) Si $n$ es suficientemente grande, determine la distribucion aproximada de $\hat p_1$
+
+
+
+https://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/NormalGaussians/SumofNormals/sumofnormals.pdf
