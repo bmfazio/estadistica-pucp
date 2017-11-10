@@ -95,12 +95,21 @@ f) Determinar si $\hat\theta_1$ es un estimador suficiente para $\theta$
 
 ---
 
-https://en.wikipedia.org/wiki/Sufficient_statistic#Fisher.E2.80.93Neyman_factorization_theorem
+Aplicamos la factorizacion de Fisher-Neyman sobre la verosimilitud:
 
+$$\begin{align}
+L(x_1,...,x_n\mid 2,\theta^{-1}) &= \prod_{i=1}^n2\theta^{-1} x_i\exp\{-\theta^{-1} x_i^2\}\\
+&= \left(\prod_{i=1}^n2x_i\right)\left(\theta^{-n}\exp\{-\theta^{-1}\sum_{i=1}^nx_i^2\}\right)\\
+&= h(x_{1...n})\left(\theta^{-n}\exp\{-n\theta^{-1}\hat\theta_1\}\right)
+\end{align}$$
+
+Entonces se verifica que $\hat\theta_1$ es un estimador suficiente de $\theta$.
 
 ---
 
 g) Mostrar que $\frac{\sqrt{n}\left(\hat\theta_1-\theta\right)}{2\sqrt{\hat\theta_1}} \xrightarrow{\mathcal{D}} \text{N}(0,h)$ y determinar el valor de $h$
+
+---
 
 ---
 
