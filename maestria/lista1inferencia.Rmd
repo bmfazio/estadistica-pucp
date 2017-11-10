@@ -135,10 +135,18 @@ $$\begin{align}
 \text{E}\left[\tilde\theta\right] &= C\text{E}\left[\max \{X_1,...,X_n\} \right]\\
 &= C\int_{-\infty}^{\infty} x nf_X(x)F_X(x)^{(n-1)}dx\\
 &= Cn\int_{0}^{2\theta} x \frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx\\
-&= Cn\int_{0}^{2\theta} x \frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx\\
-
+&= \frac{Cn}{\left(2\theta\right)^n}\int_{0}^{2\theta}x^ndx\\
+&= \frac{Cn}{\left(2\theta\right)^n}\frac{\left(2\theta\right)^{n+1}}{n+1}\\
+&= C\frac{2n}{n+1}\theta\\
 \end{align}$$
 
+Con $C = \frac{n+1}{2n}$ se tiene el estimador insesgado. Evaluamos varianza:
+
+$$\begin{align}
+\text{V}\left[\tilde\theta\right] &= \text{E}\left[\tilde\theta^2 \right]-\text{E}\left[\tilde\theta \right]^2\\
+&= C^2\int_{0}^{2\theta} x^2 \frac{1}{2\theta}\left(\frac{x}{2\theta}\right)^{(n-1)}dx - \theta^2\\
+&= \frac{C^2}{\left(2\theta\right)^n}\frac{(2\theta)^{n+2}}{n+2} - \theta^2\\
+\end{align}$$
 4.
 
 $$\hat p_1 = \frac{\bar X}{m} \text{, } \hat p_2 = \bar X \text{, } \hat p_3 = \frac{X_1 + X_n}{2m} \text{ y } \hat p_4 = \frac{X_1}{m}$$
@@ -166,9 +174,9 @@ La varianza de $\hat p_1$ es menor para $n > 2$, por lo que siempre es tan o mas
 b) probabilidad maxima de error (probabilidad de 7, 8, 9)
 
 $$\begin{align}
-\text{P}\left(0.7 \leq \hat p_{1|m=1,n=10} \leq 0.9 \right) &= \text{P}\left(0.7 \leq \frac{1}{10}\sum_{i=1}^{10}X_i \leq 0.9 \right)\\
+\text{P}\left(0.7 \leq \hat p_1 \leq 0.9\right)_{m = 1, p = 0.8; n = 10} &= \text{P}\left(0.7 \leq \frac{1}{10}\sum_{i=1}^{10}X_i \leq 0.9 \right)\\
 &= \sum_{j=7}^9\text{P}\left(\sum_{i=1}^{10}X_i = j \right)\\
-&= \sum_{j=7}^9{10 \choose j}p^j(1-p)^{10-j}\\
+&= \sum_{j=7}^9{10 \choose j}0.8^j(1-0.8)^{10-j}\\
 &\approx 0.77 
 \end{align}$$
 
