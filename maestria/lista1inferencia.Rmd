@@ -165,4 +165,11 @@ La varianza de $\hat p_1$ es menor para $n > 2$, por lo que siempre es tan o mas
 
 b) probabilidad maxima de error (probabilidad de 7, 8, 9)
 
+$$\begin{align}
+\text{P}\left(0.7 \leq \hat p_{1|m=1,n=10} \leq 0.9 \right) &= \text{P}\left(0.7 \leq \frac{1}{10}\sum_{i=1}^{10}X_i \leq 0.9 \right)\\
+&= \sum_{j=7}^9\text{P}\left(\sum_{i=1}^{10}X_i = j \right)\\
+&= \sum_{j=7}^9{10 \choose j}p^j(1-p)^{10-j}\\
+&\approx 0.77 
+\end{align}$$
+
 c) https://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/NormalGaussians/SumofNormals/sumofnormals.pdf
