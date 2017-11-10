@@ -69,6 +69,14 @@ d) Estudiar la consistencia fuerte de $\hat\theta_1$ y $\hat\theta_2$
 
 ---
 
+https://math.stackexchange.com/questions/2166663/strong-consistency-of-estimator-2mean-on-uniform-distribution
+
+$$\begin{align}
+\text{P}(\lim_{n\rightarrow\infty}|\hat\theta_1-\theta| < \epsilon) = 
+\end{align}$$
+
+---
+
 e) Hallar la varianza de $\hat\theta_1$
 
 ---
@@ -84,6 +92,11 @@ $$\begin{align}
 ---
 
 f) Determinar si $\hat\theta_1$ es un estimador suficiente para $\theta$
+
+---
+
+https://en.wikipedia.org/wiki/Sufficient_statistic#Fisher.E2.80.93Neyman_factorization_theorem
+
 
 ---
 
@@ -144,7 +157,7 @@ $$\begin{align}
 &= \frac{\theta^2}{3}\left(\frac{1}{n} + \sum_{i=1}^nd_i^2\right)\\
 \end{align}$$
 
-Por lo tanto, la varianza es minima cuando $d_i = 0$, lo que implica $a_i = 1/n$. Entonces, el MELI viene dado por
+Por lo tanto, la varianza es minima cuando todo $d_i = 0$, lo que implica $a_i = 1/n$. Entonces, el MELI viene dado por
 
 $$\hat\theta_n^\star = \frac{1}{n}\sum_{i=1}^nX_i$$
 
