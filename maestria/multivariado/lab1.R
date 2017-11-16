@@ -37,13 +37,13 @@ x=cbind(rnorm(100,1000,100),
         c(rnorm(50),rnorm(50,10,1)))
 plot(x,pch=16)
 #k-means datos originales
-res=kmeans(x,2)
+res=kmeans(x = x,centers = 2)
 plot(x,col=c("green","red")[res$cluster],pch=16)
 # Estandarización
 xs=scale(x)
 plot(xs,pch=16)
 #k-means datos estandarizados
-res=kmeans(xs,2)
+res=kmeans(xs,3)
 plot(x,col=c("green","red")[res$cluster],pch=16)
 
 
@@ -96,7 +96,7 @@ distritos=distritos[,-1]
 rownames(distritos)=nombres
 head(distritos)
 
-res<-kmeans(scale(distritos),2)
+res<-kmeans(scale(distritos),4,nstart = 50)
 res
 
 #------------------------------------#
@@ -106,7 +106,7 @@ res
 # Suma de cuadrados dentro de clusters
 wss<-numeric()
 for(h in 2:10){
-  b<-kmeans(scale(distritos),h)
+  b<-kmeans(scale(distritos),centers = h,nstart = 50)
   wss[h-1]<-b$tot.withinss
 }
 plot(2:10,wss,type="b")
@@ -115,7 +115,7 @@ plot(2:10,wss,type="b")
 diss.distritos=daisy(scale(distritos))
 par(mfrow=c(1,3))
 for(h in 2:4){
-  res=kmeans(scale(distritos),h)
+  res=kmeans(scale(distritos),h,nstart = 50)
   plot(silhouette(res$cluster,diss.distritos))
 }
 par(mfrow=c(1,1))
@@ -133,7 +133,7 @@ plot(2:10,ch,type="b",xlab="k",
 kmeansruns(scale(distritos),criterion="ch")
 kmeansruns(scale(distritos),criterion="asw")
 
-res=kmeans(scale(distritos),2)
+res=kmeans(scale(distritos),2,nstart = 100)
 plotcluster(distritos,res$cluster)
 
 clusplot(distritos,res$cluster, color = TRUE,
@@ -299,7 +299,7 @@ ylab="Criterio de Calinski-Harabasz")
 a=hclust(dist(scale(distritos)),method="ward.D")
 plot(a)
 
-(b=cutree(a, k=4))
+(b=cutree(a, h = 20))
 
 plot(a)
 
