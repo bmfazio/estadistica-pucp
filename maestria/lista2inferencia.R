@@ -28,8 +28,8 @@ $$\begin{align}
 Igualamos al primer momento muestral para obtener el estimador de momentos:
 
 $$\begin{align}
-\frac{3}{2} - \frac{5}{12}\hat\theta_{M} &= \bar X\\
-\Rightarrow \hat\theta_{M} &= \frac{18-12\bar X}{5}
+\frac{3}{2} - \frac{5}{12}\hat\theta_{\text{MM}} &= \bar X\\
+\Rightarrow \hat\theta_{\text{MM}} &= \frac{18-12\bar X}{5}
 \end{align}$$
 
 ---
@@ -53,6 +53,21 @@ c) Halle el estimador de máxima verosimilitud de $\theta$
 
 ---
 
+Hallamos la log-verosimilitud y sus derivadas para una muestra aleatoria:
 
+$$\begin{align}
+\ell(x_1,...,x_n\mid\theta)&= \sum_{i=1}^n \log f(x_i\mid\theta)\\
+&= \sum_{x_i \in (0,1])} \log \theta x_i + \sum_{x_i \in (1,2])} \log (1-\frac{\theta}{2})\\
+\Rightarrow \ell' &= \sum_{x_i \in (0,1])} \frac{1}{\theta} - \sum_{x_i \in (1,2])} \frac{1}{2-\theta}\\
+&= \frac{n_{(0,1]}}{\theta} - \frac{n_{(1,2]}}{2-\theta}\\
+\Rightarrow \ell'' &= -\frac{n_{(0,1]}}{\theta^2} - \frac{n_{(1,2]}}{(2-\theta)^2}
+\end{align}$$
+
+Buscamos puntos críticos de $\ell$ para obtener el estimador de máxima verosimilitud:
+
+$$\begin{align}
+\frac{n_{(0,1]}}{\theta_{\text{MV}}} - \frac{n_{(1,2]}}{2-\theta_{\text{MV}}} &= 0\\
+\Rightarrow \hat\theta_{\text{MV}} &= \frac{2}{1+\frac{n_{(1,2]}}{n_{(0,1]}}}
+\end{align}$$
 
 ---
