@@ -62,9 +62,7 @@ $$\begin{align}
 &= \frac{n_{(0,1]}}{\theta} - \frac{n_{(1,2]}}{2-\theta}\\
 \Rightarrow \ell'' &= -\frac{n_{(0,1]}}{\theta^2} - \frac{n_{(1,2]}}{(2-\theta)^2}
 \end{align}$$
-
 Dado que $\ell''$ es negativa para todo valor de $\theta$, los puntos críticos de $\ell$ corresponden a un máximo. Buscamos estos puntos para obtener el estimador de máxima verosimilitud:
-
 $$\begin{align}
 &\frac{n_{(0,1]}}{\hat\theta_{\text{MV}}} - \frac{n_{(1,2]}}{2-\hat\theta_{\text{MV}}} = 0\\
 \Rightarrow &\hat\theta_{\text{MV}} = \frac{2}{1+\frac{n_{(1,2]}}{n_{(0,1]}}}\\
@@ -109,12 +107,36 @@ Bajo el modelo considerado, $\text{P}(X \le 0) = 0$, por lo que descartamos las 
 
 ```{r}
 x <- x[x>0]
-
 # Estimacion MM
 (18 - 12*mean(x))/5
 # Estimacion MV
 2*(1-length(x[x>1])/length(x))
 ```
+
+Ya que ambos estimadores son insesgados, comparamos sus varianzas para determinar cuál de las estimaciones es más fiable:
+
+$$\begin{align}
+\text{V}\left[\hat\theta_{MM}\right] &= \text{V}\left[\frac{18-12\bar X}{5}\right]&\text{V}\left[\hat\theta_{MV}\right] &= \text{V}\left[2\left(1 - \frac{n_{(1,2]}}{n}\right)\right]\\
+&= \frac{144}{25}\text{V}\left[\bar X\right]&&= \frac{4}{n^2}\text{V}\left[n_{(1,2]}\right]\\
+&= \frac{144}{25}\frac{\text{V}\left[X\right]}{n}&&\text{Var de v.a. binomial: } np(1-p)\\
+&= \frac{144}{25}\frac{1}{n}\left(\text{E}\left[X^2\right]-\text{E}\left[X\right]^2\right)&&= \frac{4}{n^2}n\left(1-\frac{\theta}{2}\right)\frac{\theta}{2}\\
+&= \frac{144}{25}\frac{1}{n}\left(\int_0^1x^2\theta xdx + \int_1^2x^2\left(1-\frac{\theta}{2}\right)dx - \left(\frac{3}{2} - \frac{5}{12}\theta\right)^2\right)&&= \frac{1}{n}\left(2\theta - \theta^2\right)\\
+&= \frac{1}{n}\left(\frac{48}{25}\theta + \frac{12}{25} - \theta^2 \right)&\\
+\end{align}$$
+
+$$\begin{align}
+\text{V}\left[\hat\theta_{MM}\right] &= \text{V}\left[\frac{18-12\bar X}{5}\right]\\
+&= \frac{144}{25}\text{V}\left[\bar X\right]\\
+&= \frac{144}{25}\frac{\text{V}\left[X\right]}{n}\\
+&= \frac{144}{25}\frac{1}{n}\left(\text{E}\left[X^2\right]-\text{E}\left[X\right]^2\right)\\
+&= \frac{144}{25}\frac{1}{n}\left(\int_0^1x^2\theta xdx + \int_1^2x^2\left(1-\frac{\theta}{2}\right)dx - \left(\frac{3}{2} - \frac{5}{12}\theta\right)^2\right)\\
+&= \frac{1}{n}\left(\frac{48}{25}\theta + \frac{12}{25} - \theta^2 \right)\\
+\text{V}\left[\hat\theta_{MV}\right] &= \text{V}\left[2\left(1 - \frac{n_{(1,2]}}{n}\right)\right]\\
+&= \frac{4}{n^2}\text{V}\left[n_{(1,2]}\right]\\
+&\text{Var de v.a. binomial: } np(1-p)\\
+&= \frac{4}{n^2}n\left(1-\frac{\theta}{2}\right)\frac{\theta}{2}\\
+&= \frac{1}{n}\left(2\theta - \theta^2\right)\\
+\end{align}$$
 
 ---
 
@@ -148,18 +170,15 @@ Empleamos el Lagrangiano para obtener el EMV sujeto a la restricción $\sum_{i=1
 $$\begin{align}
 \mathcal{L}(p_1,...p_k) &= \log n! - \sum_{i=1}^k\log x_i! + \sum_{i=1}^k x_i\log p_i - \lambda(\sum_{i=1}^kp_i - 1)\\
 \Rightarrow \frac{\partial\mathcal{L}}{\partial p_h} &= \frac{x_h}{p_h} - \lambda\quad,\quad\frac{\partial\mathcal{L}}{\partial \lambda} = \sum_{i=1}^kp_i - 1\\
-\Rightarrow \hat p_h &= \frac{x_h}{\sum_{i=1}^kx_i}
+\Rightarrow \hat p_{h\text{MV}} &= \frac{x_h}{\sum_{i=1}^kx_i}
 \end{align}$$
 
 ---
 
 4. Considere un modelo de la forma $Y_j = \beta x_j + \epsilon_j$ con $\text{E}(\epsilon_j) = 0$, $\text{V}(\epsilon_j) = \sigma^2 x_j^p$ y $p$ conocido
-
 a) Halle el MELI de $\beta$
 
 ---
-
-
 
 ---
 
@@ -173,19 +192,13 @@ c) Si se asumen errores normales, halle los EMV de $\beta$ y $\sigma^2$
 
 ---
 
-
 ---
 
 5. Considere el siguiente modelo de regresión múltiple no lineal:
-
 $$Y_j = g(x_j,\beta)+\epsilon_j,\quad j=1,...,n$$
-
 donde $g : \mathbb{R}^d \rightarrow \mathbb{R}$ es una función con segundas derivadas parciales continuas, $x_j$ un vector $p$-dimensional de variables no aleatorias independientes y $\epsilon_j \sim \text{N}(0,\sigma^2)$. Se asume que los errores son independientes.
-
 a) Muestre que el EMV de $\sigma^2$ viene dado por:
-
 $$\hat\sigma^2 = \frac{1}{n}\sum_{j=1}^n \left(Y_j - g(x_j,\hat\beta)\right)^2,$$
-
 donde $\hat\beta$ es el EMV de $\beta$
 
 ---
