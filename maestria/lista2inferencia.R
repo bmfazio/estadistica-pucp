@@ -92,6 +92,8 @@ e) Bajo el modelo considerado, estime $\theta$ para una marca de shampoo con pre
 datos <- c(13.8,14.5,14,12.99,15,16)
 ```
 
+Determine la mejor estimación bajo los métodos considerados.
+
 ---
 
 Calculamos los $X$ observados:
@@ -113,7 +115,7 @@ x <- x[x>0]
 2*(1-length(x[x>1])/length(x))
 ```
 
-Ya que ambos estimadores son insesgados, comparamos sus varianzas para determinar cuál de las estimaciones es más fiable:
+Las estimaciones no coinciden. Ya que ambos estimadores son insesgados, comparamos sus varianzas:
 
 $$\begin{align}
 \text{V}\left[\hat\theta_{MM}\right] &= \text{V}\left[\frac{18-12\bar X}{5}\right]&\text{V}\left[\hat\theta_{MV}\right] &= \text{V}\left[2\left(1 - \frac{n_{(1,2]}}{n}\right)\right]\\
@@ -125,18 +127,12 @@ $$\begin{align}
 \end{align}$$
 
 $$\begin{align}
-\text{V}\left[\hat\theta_{MM}\right] &= \text{V}\left[\frac{18-12\bar X}{5}\right]\\
-&= \frac{144}{25}\text{V}\left[\bar X\right]\\
-&= \frac{144}{25}\frac{\text{V}\left[X\right]}{n}\\
-&= \frac{144}{25}\frac{1}{n}\left(\text{E}\left[X^2\right]-\text{E}\left[X\right]^2\right)\\
-&= \frac{144}{25}\frac{1}{n}\left(\int_0^1x^2\theta xdx + \int_1^2x^2\left(1-\frac{\theta}{2}\right)dx - \left(\frac{3}{2} - \frac{5}{12}\theta\right)^2\right)\\
-&= \frac{1}{n}\left(\frac{48}{25}\theta + \frac{12}{25} - \theta^2 \right)\\
-\text{V}\left[\hat\theta_{MV}\right] &= \text{V}\left[2\left(1 - \frac{n_{(1,2]}}{n}\right)\right]\\
-&= \frac{4}{n^2}\text{V}\left[n_{(1,2]}\right]\\
-&\text{Var de v.a. binomial: } np(1-p)\\
-&= \frac{4}{n^2}n\left(1-\frac{\theta}{2}\right)\frac{\theta}{2}\\
-&= \frac{1}{n}\left(2\theta - \theta^2\right)\\
+\text{V}\left[\hat\theta_{MM}\right] - \text{V}\left[\hat\theta_{MV}\right] &= \frac{1}{n}\left(\frac{48}{25}\theta + \frac{12}{25} - \theta^2 \right) -  \frac{1}{n}\left(2\theta - \theta^2\right)\\
+&= \frac{1}{n}\left(\frac{12-2\theta}{25}\right)\\
+\Rightarrow \text{V}\left[\hat\theta_{MM}\right] > \text{V}\left[\hat\theta_{MV}\right] &\text{ para } \theta \in [0,2]
 \end{align}$$
+
+Por lo cual consideramos que $\hat\theta_{MV} = 4/3$ es el mejor estimado.
 
 ---
 
