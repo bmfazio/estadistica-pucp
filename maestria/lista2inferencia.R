@@ -176,6 +176,18 @@ a) Halle el MELI de $\beta$
 
 ---
 
+$$\begin{align}
+\text{E}\left[\hat\beta\right] &= \text{E}\left[\sum_{i=1}^na_iY_i\right]&\text{V}\left[\hat\beta\right] &= \text{V}\left[\sum_{i=1}^na_iY_i\right]\\
+&= \sum_{i=1}^na_i\text{E}\left[\beta x_i + \epsilon_i\right]&&= \sum_{i=1}^na_i^2\text{V}\left[\beta x_i + \epsilon_i\right]\\
+&= \beta\sum_{i=1}^na_ix_i&&= \sigma^2\sum_{i=1}^na_i^2x_i^p\\
+\end{align}$$
+
+Para obtener el MELI, requerimos que $\hat\beta$ sea insesgado lo que implica $\sum_{i=1}^na_ix_i = 1$. Además, buscamos los $a_i$ que minimicen la varianza:
+
+$$\begin{align}
+\mathcal{L}\left(a_i\right) &= \text{V}\left[\hat\beta\right] - \lambda\left(\sum_{i=1}^na_ix_i - 1\right)\\
+\end{align}$$
+
 ---
 
 b) Halle el EMC para $\beta$ y su sesgo
