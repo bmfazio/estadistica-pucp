@@ -186,6 +186,34 @@ Para obtener el MELI, requerimos que $\hat\beta$ sea insesgado lo que implica $\
 
 $$\begin{align}
 \mathcal{L}\left(a_i\right) &= \text{V}\left[\hat\beta\right] - \lambda\left(\sum_{i=1}^na_ix_i - 1\right)\\
+\Rightarrow \nabla\mathcal{L} &= \left[
+\begin{array}{cccc|c}
+  \frac{\sigma^2}{2}x_1^p&0&\cdots&-x_1&0\\
+  \vdots&\ddots&&\vdots&\vdots\\
+  0&&\frac{\sigma^2}{2}x_n^p&-x_n&0\\
+  x_1&\cdots&x_n&0&1\\
+\end{array}
+\right]\\
+&= \left[
+\begin{array}{cccc|c}
+  \frac{\sigma^2}{2}x_1^p&0&\cdots&-x_1&0\\
+  \vdots&\ddots&&\vdots&\vdots\\
+  0&&\frac{\sigma^2}{2}x_n^p&-x_n&0\\
+  0&\cdots&0&\frac{2}{\sigma^2}\sum_{j=1}^nx_j^{2-p}&1\\
+\end{array}
+\right]\\
+&= \left[
+\begin{array}{cccc|c}
+  \frac{\sigma^2}{2}x_1^p&0&\cdots&0&\frac{\sigma^2}{2}\frac{x_1}{\sum x_j^{2-p}}\\
+  \vdots&\ddots&&\vdots&\vdots\\
+  0&&\frac{\sigma^2}{2}x_n^p&0&\frac{\sigma^2}{2}\frac{x_n}{\sum x_j^{2-p}}\\
+  0&\cdots&0&\frac{2}{\sigma^2}\sum x_j^{2-p}&1\\
+\end{array}
+\right]\\
+\end{align}$$
+$$\begin{align}
+\Rightarrow a_i &= \frac{x_i^{1-p}}{\sum x_j^{2-p}}\\
+\Rightarrow \hat\beta_{\text{MELI}} &= \left(\sum_{j=1}^n x_j^{2-p}\right)^{-1}\sum_{i=1}^n y_i x_i^{1-p}\\
 \end{align}$$
 
 ---
@@ -193,6 +221,8 @@ $$\begin{align}
 b) Halle el EMC para $\beta$ y su sesgo
 
 ---
+
+
 
 ---
 
