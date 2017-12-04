@@ -8,36 +8,14 @@
 
 ###
 
-# El primer intento con codigo de clase arroja coeficientes con autocorrelacion elevada
-# 
-# Solucion: priors no tan extemadamente poco informativos
-# 
-# El rango de temperatura es 28
-# Tratemos de poner un prior "razonable"
-# Si en la temperatura minima la probabilidad es casi nula:
-# digamos que la probabilidad es de 6 sigma pnorm(6)
-# con un coef = 1, pnorm(-6)/(1-pnorm(-6))*exp(28) seria el odds en el max
-# tomamos esos odds y con o/(1+o) nos damos cuenta que el evento se vuelve
-# casi seguro
-# Una variacion tan extrema es demasiado alta para ser razonable
-# Para beta0 aplicamos la misma logica 6 sigma:
-# 2/log(pnorm(-6,0,1))  [la mitad nos da la SD razonable]
-
-# Para la redaccion:
-# 1. Correr con priors mega no informativos
-# 2. Verificar autocorrelacion absurda
-# 3. Replantear priors con los calculos de arriba
-# 4. Todo es felicidad
-
-###
 library(coda)
 library(mcmcplots)
 library(R2WinBUGS)
-bugs.dir<-"D:/Utilities/WinBUGS14"
+bugs.dir<-"D:/bfazio/WinBUGS14"
 
 # Datos
 
-ori <- read.csv("D:/Clases/estadisticaPUCP/Lineales 2/Datos/orings.csv")
+ori <- read.csv("D:/bfazio/maestria/lineales 2/Datos/orings.csv")
 ori$temperatura <- scale(ori$temperatura)
 
 X <- model.matrix(~ori$temperatura)
@@ -62,15 +40,15 @@ modelo <- function(){
 write.model(modelo, "m.bug")
 
 sim.logit <- bugs(data = datos,inits = iniciales,
-             parameters.to.save = parametros,model.file="m.bug",
-             n.chains=2, n.iter=350000,n.burnin=50000,n.thin=30,
-             bugs.directory=bugs.dir,clearWD=TRUE, debug=FALSE)
+                  parameters.to.save = parametros,model.file="m.bug",
+                  n.chains=2, n.iter=350000,n.burnin=50000,n.thin=30,
+                  bugs.directory=bugs.dir,clearWD=TRUE, debug=FALSE)
 
-  # Diagnostico de convergencia
+# Diagnostico de convergencia
 mcmcplot(sim.logit)
 
-  # Interpretacion
-print(fit3,4)
+# Interpretacion
+print(sim.logit,4)
 
 ##############################################################
 #Diagnostico#
@@ -164,3 +142,37 @@ mcmcplot(fit2)
 ###
 
 # d) El día del accidente del transbordador había una temperatura de 31 °F. Considerando el mejor modelo encontrado en (b), realice una estimación puntual y por intervalo de la probabilidad de que ocurra una falla en un anillo de goma.
+
+#######
+
+# 4) niBBa
+
+# a) 
+library(gam)
+library(ISLR)
+library(MASS)
+
+# Seleccion de obs
+set.seed(281117)
+train<-sort(sample(1:nrow(College),600))
+
+# Estimacion de modelos
+
+  # Seleccion de variables con modelo lineal
+m1 <- glm(Outstate~.,family=gaussian,data=College[train,])
+m1.s <- stepAIC(m1)
+
+  # Selector de variables
+fulltrans <- function(func,arg){
+  as.formula(paste("Outstate~Private+",
+                   paste0(paste0(func,"(",names(m1.s$coefficients)[-(1:2)],",",arg,")"),collapse="+")))}
+
+m2 <- gam(fulltrans("s",1),family=gaussian,data=College[train,])
+m2 <- gam(fulltrans("s",2),family=gaussian,data=College[train,])
+m3 <- gam(fulltrans("s",4),family=gaussian,data=College[train,])
+m4 <- gam(fulltrans("lo",0.25),family=gaussian,data=College[train,])
+m5 <- gam(fulltrans("lo",0.75),family=gaussian,data=College[train,])
+
+gam(Outstate ~ Private + lo(Apps, 0.25) + lo(Accept, 0.25) + lo(Enroll, 0.25) + lo(Top10perc, 0.25) + lo(Room.Board, 0.25) + lo(Personal, 0.25) + lo(Terminal,0.25) + lo(S.F.Ratio, 0.25) + lo(perc.alumni, 0.25) + lo(Expend, 0.25) + lo(Grad.Rate, 0.25),family=gaussian,data=College[train,])
+
+Outstate ~ Private + lo(Apps, 0.25) + lo(Accept, 0.25) + lo(Enroll, 0.25) + lo(Top10perc, 0.25) + lo(Room.Board, 0.25) + lo(Personal, 0.25) + lo(Terminal,0.25) + lo(S.F.Ratio, 0.25) + lo(perc.alumni, 0.25) + lo(Expend, 0.25) + lo(Grad.Rate, 0.25)
